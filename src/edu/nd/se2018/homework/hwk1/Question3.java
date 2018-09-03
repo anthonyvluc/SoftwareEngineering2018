@@ -6,13 +6,14 @@ public class Question3 {
 	public Question3(){}	
 
     public int getMirrorCount(int[] numbers){
+    	int mirrorLength = 0;
+    	
     	// Handle case of empty array.
     	if (numbers.length == 0) {
-    		return 0;
+    		return mirrorLength;
     	}
 
     	// Determine length of mirrored sequence.
-    	int mirrorLength = 0;
     	mirrorLength = mirrorCountHelper(numbers, 0, numbers.length-1, mirrorLength);
     	
     	// Handle case where there are no mirrors in array.
