@@ -12,30 +12,42 @@ public class Race {
 		this.horses = new Horse[this.limit];
 	}
 	
-	void begin() {
+	public void start() {
+		System.out.println("Starting race in");
+		for (int i = 3; i > 0; --i) {
+			System.out.println(i + "...");
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		
+		run();
 	}
 	
 	void run() {
-		
-	}
-	
-	void enrollHorse(Horse horse) {
-		if (this.numHorses < this.limit) {
-			this.horses[this.numHorses] = horse;
-			this.numHorses += this.numHorses;			
+		for (Horse horse : horses) {
+			horse.move();
 		}
 	}
 	
-	void announceWinner() {
+	public void enrollHorse(Horse horse) {
+		if (this.numHorses < this.limit) {
+			this.horses[this.numHorses] = horse;
+			this.numHorses = this.numHorses + 1;
+		}
+	}
+	
+	public void announceWinner() {
 		System.out.println("The winner is: " + this.winner.getName() + " #" + this.winner.getNumber() + "!");
 	}
 
-	void setWinner(Horse winner) {
+	public void setWinner(Horse winner) {
 		this.winner = winner;
 	}
 	
-	void printStatus() {
+	public void printStatus() {
 		for (Horse horse : horses) {
 			if (horse != null) {
 				System.out.println(horse.getName() + " has run " + horse.getCurrentDistance() + " miles");
