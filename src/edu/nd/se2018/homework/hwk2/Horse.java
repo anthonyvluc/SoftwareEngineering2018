@@ -49,12 +49,16 @@ public class Horse {
 		return this.currentDistance;
 	}
 	
+	double getMaxSpeed() {
+		return this.maxSpeed;
+	}
+	
 	int getNumber() {
 		return this.number;
 	}
 	
 	void move() {
-		// TODO
-		System.out.println("");
+		double nextDistance = this.raceStrategy.calculateDistance(this);
+		this.currentDistance = this.currentDistance + nextDistance;
 	}
 }

@@ -4,7 +4,7 @@ public class Race {
 
 	private Horse[] horses;
 	private Horse 	winner;
-	private double 	distance 	= 10.0;
+	private double 	totalMiles 	= 10.0;
 	private int 	numHorses 	= 0;
 	private int 	limit 		= 5;	// Exactly five horses
 	
@@ -27,8 +27,15 @@ public class Race {
 	}
 	
 	void run() {
-		for (Horse horse : horses) {
-			horse.move();
+		boolean isDone = false;
+		while(!isDone) {
+			for (Horse horse : horses) {
+				if (horse.getCurrentDistance() >= this.totalMiles) {
+					setWinner(horse);
+					isDone = true;
+				}
+				horse.move();
+			}			
 		}
 	}
 	

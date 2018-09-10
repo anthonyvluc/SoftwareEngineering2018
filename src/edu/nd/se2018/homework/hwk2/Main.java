@@ -22,6 +22,9 @@ public class Main {
 
 		// Start race.
 		race.start();
+		
+		// Announce winner,
+		race.announceWinner();
 	}
 
 }
