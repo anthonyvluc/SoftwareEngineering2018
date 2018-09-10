@@ -23,6 +23,8 @@ public class Race {
 			}
 		}
 		
+		System.out.println("GO!!!");
+
 		run();
 	}
 	
@@ -44,7 +46,7 @@ public class Race {
 			if (!isDone) {
 				// Sleep.
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(2000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -72,7 +74,7 @@ public class Race {
 	}
 	
 	public void printStatus() {
-		System.out.println("##############################");
+		System.out.println("#############################");
 		for (Horse horse : horses) {
 			if (horse != null) {
 				System.out.format("%s has run %.2f miles\n", horse.getName(), horse.getCurrentDistance());
