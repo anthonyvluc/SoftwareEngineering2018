@@ -3,29 +3,48 @@ package edu.nd.se2018.homework.hwk2;
 public class Race {
 
 	private Horse[] horses;
-	private Horse 	winner;
+	private Horse 	winner		= null;
 	private double 	totalMiles 	= 10.0;
-	private int 	numHorses 	= 0;
 	private int 	limit 		= 5;	// Exactly five horses
+	private int 	numHorses 	= 0;
+	private boolean test;
 	
-	Race() {
+	Race(boolean test) {
+		this.test = test;
 		this.horses = new Horse[this.limit];
 	}
 	
 	public void start() {
-		System.out.println("Starting race in");
-		for (int i = 3; i > 0; --i) {
-			System.out.println(i + "...");
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		if (this.numHorses != this.limit) {
+			if (!test) {
+				System.out.println("Please enroll more horses before starting the race.");	
 			}
-		}
-		
-		System.out.println("GO!!!");
+		} else {
+			// Ensure all horses start at beginning of race.
+			for (Horse horse : horses) {
+				if (horse != null) {
+					horse.setCurrentDistance(0.0);
+				}
+			}
+			
+			if (!test) {
+				System.out.println("Starting race in");
 
-		run();
+				for (int i = 3; i > 0; --i) {
+					System.out.println(i + "...");
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+
+				System.out.println("GO!!!");
+			}
+
+			// Run race.
+			run();				
+		}
 	}
 	
 	private void run() {
@@ -45,14 +64,16 @@ public class Race {
 
 			if (!isDone) {
 				// Sleep.
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				if (!test) {
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 
-				// Print race status.
-				printStatus();				
+					// Print race status.
+					printStatus();					
+				}
 			}
 		}
 	}
@@ -65,8 +86,12 @@ public class Race {
 	}
 	
 	public void announceWinner() {
-		System.out.println("\n~#~#~#~#~#~#~#~#~#~#~#~#~#~#~");
-		System.out.println("The winner is: " + this.winner.getName() + " #" + this.winner.getNumber() + "!");
+		if (winner != null) {
+			System.out.println("\n~#~#~#~#~#~#~#~#~#~#~#~#~#~#~");
+			System.out.println("The winner is: " + this.winner.getName() + " #" + this.winner.getNumber() + "!");			
+		} else {
+			System.out.println("There is no winner yet!");			
+		}
 	}
 
 	public void setWinner(Horse winner) {
@@ -82,4 +107,11 @@ public class Race {
 		}
 	}
 	
+	public Horse[] getHorses() {
+		return this.horses;
+	}
+	
+	public Horse getWinner() {
+		return this.winner;
+	}
 }

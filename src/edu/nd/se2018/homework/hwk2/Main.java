@@ -4,7 +4,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		// Declare a Race class.
-		Race race = new Race();
+		Race race = new Race(false);
 		
 		// Create five horses.
 		Horse blitz = new Horse(0.0, "Blitz", 101, 0.5, new EarlySprintStrategy());
