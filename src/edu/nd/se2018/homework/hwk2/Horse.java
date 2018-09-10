@@ -55,5 +55,6 @@ public class Horse {
 	
 	void move() {
 		// TODO
+		System.out.println("");
 	}
 }
