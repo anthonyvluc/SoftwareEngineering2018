@@ -106,6 +106,50 @@ public class RaceTest {
 		assert(this.horseRace.getWinner().getName() == "Slow1");
 	}
 	
+	@Test
+	// Verify the ability to change race strategies during the race.
+	public void test5() {
+		resetTest();
+		
+		Horse 	winner = null;
+		boolean isDone = false;
+		
+		Horse slow1 = new Horse(0.0, "Slow1", 00, 0.1, new SteadyRunStrategy());
+		Horse slow2 = new Horse(0.0, "Slow2", 00, 0.1, new SteadyRunStrategy());
+		Horse slow3 = new Horse(0.0, "Slow3", 00, 0.1, new SteadyRunStrategy());
+		Horse slow4 = new Horse(0.0, "Slow4", 00, 0.1, new SteadyRunStrategy());
+		Horse slow5 = new Horse(0.0, "Slow5", 00, 0.1, new SteadyRunStrategy());
+		this.horseRace.enrollHorse(slow1);
+		this.horseRace.enrollHorse(slow2);
+		this.horseRace.enrollHorse(slow3);
+		this.horseRace.enrollHorse(slow4);
+		this.horseRace.enrollHorse(slow5);
+
+		// Loop for race.
+		int i = 0;
+		while(!isDone) {
+			// Move horses.
+			for (Horse horse : this.horseRace.getHorses()) {
+				if (horse.getCurrentDistance() >= 10.0) {
+					winner = horse;
+					isDone = true;
+					break;
+				}
+				if (i == 0) {
+					slow3.setRaceStrategy(new EarlySprintStrategy());
+				} else if (i == 20) {
+					slow3.setRaceStrategy(new SteadyRunStrategy());					
+				}
+				
+				horse.move();
+				
+				i = i + 1;
+			}
+		}
+		
+		assert(winner.getName() == "Slow3");		
+	}
+	
 	// Helper function to reset test variables.
 	private void resetTest() {
 		this.horseRace 		= new Race(true); // To avoid thread sleep.
