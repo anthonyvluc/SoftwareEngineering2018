@@ -4,7 +4,6 @@ public class EarlySprintStrategy implements RaceStrategy {
 
 	@Override
 	public double calculateDistance(Horse horse) {
-		// TODO Auto-generated method stub
 		double nextDistance = 0;
 		if (horse.getCurrentDistance() < 2.0) {
 			nextDistance = horse.getMaxSpeed();

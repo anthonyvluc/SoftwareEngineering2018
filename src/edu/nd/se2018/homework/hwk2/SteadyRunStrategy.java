@@ -4,8 +4,9 @@ public class SteadyRunStrategy implements RaceStrategy {
 
 	@Override
 	public double calculateDistance(Horse horse) {
-		// TODO Auto-generated method stub
-		return 0;
+		double nextDistance = 0;
+		nextDistance = horse.getMaxSpeed() * 0.8;
+		return nextDistance;
 	}
 
 }

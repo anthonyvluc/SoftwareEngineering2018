@@ -26,16 +26,32 @@ public class Race {
 		run();
 	}
 	
-	void run() {
+	private void run() {
 		boolean isDone = false;
+
+		// Loop for race.
 		while(!isDone) {
+			// Move horses.
 			for (Horse horse : horses) {
 				if (horse.getCurrentDistance() >= this.totalMiles) {
 					setWinner(horse);
 					isDone = true;
+					break;
 				}
-				horse.move();
-			}			
+				horse.move();				
+			}
+
+			if (!isDone) {
+				// Sleep.
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+
+				// Print race status.
+				printStatus();				
+			}
 		}
 	}
 	
@@ -47,6 +63,7 @@ public class Race {
 	}
 	
 	public void announceWinner() {
+		System.out.println("\n~#~#~#~#~#~#~#~#~#~#~#~#~#~#~");
 		System.out.println("The winner is: " + this.winner.getName() + " #" + this.winner.getNumber() + "!");
 	}
 
@@ -55,9 +72,10 @@ public class Race {
 	}
 	
 	public void printStatus() {
+		System.out.println("##############################");
 		for (Horse horse : horses) {
 			if (horse != null) {
-				System.out.println(horse.getName() + " has run " + horse.getCurrentDistance() + " miles");
+				System.out.format("%s has run %.2f miles\n", horse.getName(), horse.getCurrentDistance());
 			}
 		}
 	}

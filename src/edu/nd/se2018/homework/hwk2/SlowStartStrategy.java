@@ -4,8 +4,15 @@ public class SlowStartStrategy implements RaceStrategy {
 
 	@Override
 	public double calculateDistance(Horse horse) {
-		// TODO Auto-generated method stub
-		return 0;
+		double nextDistance = 0;
+		if (horse.getCurrentDistance() < 6.0) {
+			nextDistance = horse.getMaxSpeed() * 0.75;
+		} else if (horse.getCurrentDistance() < 9.0) {
+			nextDistance = horse.getMaxSpeed() * 0.9;
+		} else {
+			nextDistance = horse.getMaxSpeed();			
+		}
+		return nextDistance;
 	}
 
 }
