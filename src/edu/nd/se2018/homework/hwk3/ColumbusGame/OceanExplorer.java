@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class OceanExplorer extends Application {
@@ -59,8 +58,8 @@ public class OceanExplorer extends Application {
 		root = new AnchorPane();
 
 		// Generate the Ocean.
-		oceanMap = new OceanMap(oceanSize, cellSize, numIslands);
-		oceanMap.drawMap(root.getChildren());
+		oceanMap = new OceanMap(oceanSize, cellSize, numIslands, root.getChildren());
+		// oceanMap.drawMap(root.getChildren());
 		
 		// Create and add ships and images to view.
 		heroShip = new Ship(oceanMap.getInitialShipPosition(), oceanMap, cellSize, "images/ColumbusShip.png");
