@@ -23,28 +23,28 @@ public class Ship {
 	
 	public void goNorth() {
 		Point newPosition = new Point(this.position.x, this.position.y - 1);
-		if (oceanMap.isValidHeroPosition(newPosition)) {
+		if (oceanMap.isValidShipPosition(newPosition)) {
 			this.position.setLocation(newPosition);
 		}
 	}
 
 	public void goSouth() {
 		Point newPosition = new Point(this.position.x, this.position.y + 1);
-		if (oceanMap.isValidHeroPosition(newPosition)) {
+		if (oceanMap.isValidShipPosition(newPosition)) {
 			this.position.setLocation(newPosition);
 		}
 	}
 
 	public void goEast() {
 		Point newPosition = new Point(this.position.x + 1, this.position.y);
-		if (oceanMap.isValidHeroPosition(newPosition)) {
+		if (oceanMap.isValidShipPosition(newPosition)) {
 			this.position.setLocation(newPosition);
 		}
 	}
 
 	public void goWest() {
 		Point newPosition = new Point(this.position.x - 1, this.position.y);
-		if (oceanMap.isValidHeroPosition(newPosition)) {
+		if (oceanMap.isValidShipPosition(newPosition)) {
 			this.position.setLocation(newPosition);
 		}
 	}

@@ -15,15 +15,17 @@ public class OceanMap {
 	}
 
 	private int dimensions;
-	Tile[][] oceanGrid;
+	Tile[][] 	oceanGrid;
 	private int scale;
 	
-	private int numIslands 	= 10;
-	private int numPirates 	= 10;
+	private int numIslands;
+	private int numPirates;
 
-	public OceanMap(int dimension, int scale) {
+	public OceanMap(int dimension, int scale, int numIslands, int numPirates) {
 		this.dimensions = dimension;
 		this.oceanGrid 	= new Tile[dimensions][dimensions];
+		this.numIslands = numIslands;
+		this.numPirates = numPirates;
 		this.scale 		= scale;
 		
 		generateOcean();
@@ -52,7 +54,34 @@ public class OceanMap {
 		}
 	}
 
-	public boolean isValidHeroPosition(Point position) {
+	public Point getInitialHeroPosition() {
+		Point initialPosition = null;
+		while (true) {
+			Random rand = new Random();
+			Point positionPoint = new Point(rand.nextInt(dimensions), rand.nextInt(dimensions));
+			if (isValidShipPosition(positionPoint)) {
+				initialPosition = positionPoint;
+				break;
+			}
+		}
+		return initialPosition;	
+	}
+	
+	public Point getInitialPiratePosition() {
+		Point initialPosition = null;
+		while (true) {
+			Random rand = new Random();
+			Point positionPoint = new Point(rand.nextInt(dimensions), rand.nextInt(dimensions));
+			if (isValidShipPosition(positionPoint)) {
+				initialPosition = positionPoint;
+				oceanGrid[positionPoint.x][positionPoint.y] = Tile.PIRATE;
+				break;
+			}
+		}
+		return initialPosition;
+	}
+	
+	public boolean isValidShipPosition(Point position) {
 		return	((position.x >= 0) && (position.x < dimensions) &&
 				 (position.y >= 0) && (position.y < dimensions) &&
 			     (oceanGrid[position.x][position.y] == Tile.OCEAN));
