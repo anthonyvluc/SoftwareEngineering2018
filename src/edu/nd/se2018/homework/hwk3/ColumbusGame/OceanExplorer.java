@@ -2,7 +2,6 @@ package edu.nd.se2018.homework.hwk3.ColumbusGame;
 
 import java.util.LinkedList;
 
-import edu.nd.se2018.homework.hwk3.ColumbusGame.OceanMap.Tile;
 import edu.nd.se2018.homework.hwk3.ColumbusGame.Ship.Direction;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -16,7 +15,7 @@ public class OceanExplorer extends Application {
 	final private int 		cellSize 	= 30;
 	final private int 		oceanSize 	= 25;
 	private int				numIslands 	= 10;
-	private int 			numPirates 	= 10;
+	private int 			numPirates 	= 7;
 	
 	OceanMap 				oceanMap;
 	Ship 	 				heroShip;
@@ -25,9 +24,11 @@ public class OceanExplorer extends Application {
 	AnchorPane 				root;
 	Scene 					scene;
 
+
 	public static void main(String[] args) {
 		launch(args);
 	}
+
 
 	@Override
 	public void start(Stage oceanStage) throws Exception {
@@ -40,12 +41,11 @@ public class OceanExplorer extends Application {
 		oceanMap.drawMap(root.getChildren());
 		
 		// Create and add ships and images to view.
-		heroShip = new Ship(oceanMap.getInitialHeroPosition(), oceanMap, Tile.OCEAN, cellSize, "images/ColumbusShip.png");
+		heroShip = new Ship(oceanMap.getInitialShipPosition(), oceanMap, cellSize, "images/ColumbusShip.png");
 		root.getChildren().add(heroShip.getShipImageView());
-		
 		pirateShips = new LinkedList<PirateShip>();
 		for (int i = 0; i < numPirates; ++i) {
-			PirateShip pirateShip = new PirateShip(oceanMap.getInitialPiratePosition(), oceanMap, Tile.PIRATE, cellSize, "images/pirateship.gif");
+			PirateShip pirateShip = new PirateShip(oceanMap.getInitialShipPosition(), oceanMap, cellSize, "images/pirateship.gif");
 			pirateShips.add(pirateShip);
 			root.getChildren().add(pirateShip.getShipImageView());
 		}
@@ -59,7 +59,8 @@ public class OceanExplorer extends Application {
 		// Start game.
 		startSailing();
 	}
-	
+
+
 	public void startSailing() {
 
 		// Register pirates as observers of the hero ship.
@@ -86,8 +87,8 @@ public class OceanExplorer extends Application {
 						break;
 					default:
 						break;				
-				}
-			}
+				}				
+			}			
 		});
 	}
 }

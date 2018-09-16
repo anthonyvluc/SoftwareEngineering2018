@@ -11,14 +11,14 @@ import javafx.scene.shape.Rectangle;
 public class OceanMap {
 
 	public enum Tile {
-	    OCEAN, ISLAND, PIRATE
+	    OCEAN, ISLAND, SHIP
 	}
 
-	private int dimensions;
-	Tile[][] 	oceanGrid;
-	private int scale;
-	
-	private int numIslands;
+	private int 	dimensions;
+	private int 	scale;
+	private int 	numIslands;
+	public Tile[][] oceanGrid;
+
 
 	public OceanMap(int dimension, int scale, int numIslands) {
 		this.dimensions = dimension;
@@ -29,7 +29,8 @@ public class OceanMap {
 		generateOcean();
 		generateIslands();
 	}
-	
+
+
 	public void drawMap(ObservableList<Node> root) {
 		for(int x = 0; x < dimensions; ++x) {
 			for (int y = 0; y < dimensions; ++y) {
@@ -42,7 +43,7 @@ public class OceanMap {
 					case ISLAND:
 						rect.setFill(Color.GREEN);
 						break;
-					case PIRATE:
+					case SHIP:
 						break;
 					default:
 						break;
@@ -52,7 +53,8 @@ public class OceanMap {
 		}
 	}
 
-	public Point getInitialHeroPosition() {
+
+	public Point getInitialShipPosition() {
 		Point initialPosition = null;
 		while (true) {
 			Random rand = new Random();
@@ -64,27 +66,15 @@ public class OceanMap {
 		}
 		return initialPosition;	
 	}
-	
-	public Point getInitialPiratePosition() {
-		Point initialPosition = null;
-		while (true) {
-			Random rand = new Random();
-			Point positionPoint = new Point(rand.nextInt(dimensions), rand.nextInt(dimensions));
-			if (isValidShipPosition(positionPoint)) {
-				initialPosition = positionPoint;
-				oceanGrid[positionPoint.x][positionPoint.y] = Tile.PIRATE;
-				break;
-			}
-		}
-		return initialPosition;
-	}
-	
+
+
 	public boolean isValidShipPosition(Point position) {
 		return	((position.x >= 0) && (position.x < dimensions) &&
 				 (position.y >= 0) && (position.y < dimensions) &&
 			     (oceanGrid[position.x][position.y] == Tile.OCEAN));
 	}
-	
+
+
 	private void generateOcean() {
 		for(int x = 0; x < dimensions; ++x) {
 			for (int y = 0; y < dimensions; ++y) {
@@ -92,7 +82,8 @@ public class OceanMap {
 			}
 		}
 	}
-	
+
+
 	private void generateIslands() {
 		int i = 0;
 		while (i < numIslands) {

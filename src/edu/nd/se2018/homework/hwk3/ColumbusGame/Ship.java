@@ -12,21 +12,19 @@ public class Ship extends Observable {
 	public enum Direction {
 	    NORTH, SOUTH, EAST, WEST
 	}
-	
-	final private int scale;
 
-	private Point position;
+	final private int 	scale;
+	private Point 		position;
 	
 	OceanMap 	oceanMap;
 	Image		shipImage;
 	ImageView	shipImageView;
-	Tile		tile;
-	
-	public Ship(Point position, OceanMap oceanMap, Tile tile, int scale, String imgPath) {
-		this.oceanMap = oceanMap;
-		this.setPosition(position);
-		this.scale = scale;
-		this.tile = tile;
+
+
+	public Ship(Point position, OceanMap oceanMap, int scale, String imgPath) {
+		this.oceanMap 	= oceanMap;
+		this.scale 		= scale;
+		this.position 	= position;
 		
 		// Set image.
 		shipImage = new Image(imgPath, scale, scale, true, true);
@@ -35,18 +33,17 @@ public class Ship extends Observable {
 		shipImageView.setY(position.y * scale);
 	}
 
-	public void setPosition(Point position) {
-		this.position = position;
-	}
-	
+
 	public Point getShipLocation(){
 		return position;
 	}
 	
+
 	public ImageView getShipImageView() {
 		return shipImageView;
 	}
-	
+
+
 	public void moveShip(Direction direction) {
 
 		switch(direction) {
@@ -66,40 +63,48 @@ public class Ship extends Observable {
 				break;
 		}
 
+		// Update tile
 		shipImageView.setX(getShipLocation().x*scale);
 		shipImageView.setY(getShipLocation().y*scale);
-		
-		oceanMap.oceanGrid[getShipLocation().x][getShipLocation().y] = tile;
-		
+		oceanMap.oceanGrid[getShipLocation().x][getShipLocation().y] = Tile.SHIP;
+
 		setChanged();
 		notifyObservers();
 	}
-	
-	public void goNorth() {
+
+
+	private void goNorth() {
 		Point newPosition = new Point(this.position.x, this.position.y - 1);
 		if (oceanMap.isValidShipPosition(newPosition)) {
-			this.position.setLocation(newPosition);
+			oceanMap.oceanGrid[position.x][position.y] = Tile.OCEAN;
+			position.setLocation(newPosition);
 		}
 	}
 
-	public void goSouth() {
+
+	private void goSouth() {
 		Point newPosition = new Point(this.position.x, this.position.y + 1);
 		if (oceanMap.isValidShipPosition(newPosition)) {
-			this.position.setLocation(newPosition);
+			oceanMap.oceanGrid[position.x][position.y] = Tile.OCEAN;
+			position.setLocation(newPosition);
 		}
 	}
 
-	public void goEast() {
+
+	private void goEast() {
 		Point newPosition = new Point(this.position.x + 1, this.position.y);
 		if (oceanMap.isValidShipPosition(newPosition)) {
-			this.position.setLocation(newPosition);
+			oceanMap.oceanGrid[position.x][position.y] = Tile.OCEAN;
+			position.setLocation(newPosition);
 		}
 	}
 
-	public void goWest() {
+
+	private void goWest() {
 		Point newPosition = new Point(this.position.x - 1, this.position.y);
 		if (oceanMap.isValidShipPosition(newPosition)) {
-			this.position.setLocation(newPosition);
+			oceanMap.oceanGrid[position.x][position.y] = Tile.OCEAN;
+			position.setLocation(newPosition);
 		}
 	}
 }
