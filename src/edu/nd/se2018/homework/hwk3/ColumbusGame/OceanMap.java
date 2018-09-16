@@ -19,13 +19,11 @@ public class OceanMap {
 	private int scale;
 	
 	private int numIslands;
-	private int numPirates;
 
-	public OceanMap(int dimension, int scale, int numIslands, int numPirates) {
+	public OceanMap(int dimension, int scale, int numIslands) {
 		this.dimensions = dimension;
 		this.oceanGrid 	= new Tile[dimensions][dimensions];
 		this.numIslands = numIslands;
-		this.numPirates = numPirates;
 		this.scale 		= scale;
 		
 		generateOcean();

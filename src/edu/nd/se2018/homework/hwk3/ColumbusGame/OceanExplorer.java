@@ -2,12 +2,11 @@ package edu.nd.se2018.homework.hwk3.ColumbusGame;
 
 import java.util.LinkedList;
 
-import edu.nd.se2018.examples.observer.catmouse.Cat;
+import edu.nd.se2018.homework.hwk3.ColumbusGame.OceanMap.Tile;
+import edu.nd.se2018.homework.hwk3.ColumbusGame.Ship.Direction;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -23,8 +22,6 @@ public class OceanExplorer extends Application {
 	Ship 	 				heroShip;
 	LinkedList<PirateShip>	pirateShips;
 
-	Image					heroShipImage, pirateShipImage;
-	ImageView 				heroShipImageView, pirateShipImageView;
 	AnchorPane 				root;
 	Scene 					scene;
 
@@ -39,16 +36,19 @@ public class OceanExplorer extends Application {
 		root = new AnchorPane();
 
 		// Generate the Ocean.
-		oceanMap = new OceanMap(oceanSize, cellSize, numIslands, numPirates);
+		oceanMap = new OceanMap(oceanSize, cellSize, numIslands);
 		oceanMap.drawMap(root.getChildren());
 		
 		// Create and add ships and images to view.
-		heroShip = new Ship(oceanMap.getInitialHeroPosition(), oceanMap);
+		heroShip = new Ship(oceanMap.getInitialHeroPosition(), oceanMap, Tile.OCEAN, cellSize, "images/ColumbusShip.png");
+		root.getChildren().add(heroShip.getShipImageView());
+		
 		pirateShips = new LinkedList<PirateShip>();
 		for (int i = 0; i < numPirates; ++i) {
-			pirateShips.add(new PirateShip(oceanMap.getInitialPiratePosition(), oceanMap));
+			PirateShip pirateShip = new PirateShip(oceanMap.getInitialPiratePosition(), oceanMap, Tile.PIRATE, cellSize, "images/pirateship.gif");
+			pirateShips.add(pirateShip);
+			root.getChildren().add(pirateShip.getShipImageView());
 		}
-		loadImages();
 		
 		// Setup.
 		scene = new Scene(root, oceanSize*cellSize, oceanSize*cellSize);
@@ -61,47 +61,33 @@ public class OceanExplorer extends Application {
 	}
 	
 	public void startSailing() {
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
 
+		// Register pirates as observers of the hero ship.
+		for (PirateShip pirateShip : pirateShips) {
+			heroShip.addObserver(pirateShip);			
+		}
+
+		// Handle user keyboard inputs.
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
 			@Override
 			public void handle(KeyEvent ke) {
 				switch(ke.getCode()) {
 					case RIGHT:
-						heroShip.goEast();
+						heroShip.moveShip(Direction.EAST);
 						break;
 					case LEFT:
-						heroShip.goWest();
+						heroShip.moveShip(Direction.WEST);
 						break;
 					case UP:
-						heroShip.goNorth();
+						heroShip.moveShip(Direction.NORTH);
 						break;
 					case DOWN:
-						heroShip.goSouth();
+						heroShip.moveShip(Direction.SOUTH);
 						break;
 					default:
 						break;				
 				}
-				heroShipImageView.setX(heroShip.getShipLocation().x*cellSize);
-				heroShipImageView.setY(heroShip.getShipLocation().y*cellSize);
 			}
 		});
-	}
-	
-	public void loadImages() {
-		// Add hero ship image to map.
-		heroShipImage = new Image("images/ColumbusShip.png", cellSize, cellSize, true, true);
-		heroShipImageView = new ImageView(heroShipImage);
-		heroShipImageView.setX(heroShip.getShipLocation().x * cellSize);
-		heroShipImageView.setY(heroShip.getShipLocation().y * cellSize);
-		root.getChildren().add(heroShipImageView);
-		
-		// Add pirate ship images to map.
-		pirateShipImage = new Image("images/pirateship.gif", cellSize, cellSize, true, true);
-		for (PirateShip pirateShip : pirateShips) {
-			pirateShipImageView = new ImageView(pirateShipImage);
-			pirateShipImageView.setX(pirateShip.getShipLocation().x * cellSize);
-			pirateShipImageView.setY(pirateShip.getShipLocation().y * cellSize);
-			root.getChildren().add(pirateShipImageView);
-		}
 	}
 }
