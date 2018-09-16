@@ -16,11 +16,13 @@ public class OceanExplorer extends Application {
 	final private int cellSize 	= 30;
 	final private int oceanSize = 25;
 	
-	OceanMap oceanMap;
-	Ship 	ship;
+	OceanMap 	oceanMap;
+	Ship 	 	heroShip;
 
-	Pane 	root;
-	Scene 	scene;
+	Image		heroShipImage;
+	ImageView 	heroShipImageView;
+	Pane 		root;
+	Scene 		scene;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -29,70 +31,66 @@ public class OceanExplorer extends Application {
 	@Override
 	public void start(Stage oceanStage) throws Exception {
 
-		
-		oceanMap = new OceanMap(oceanSize, cellSize);
-		
-		ship = new Ship(new Point(0, 0), oceanMap);
-		
-		// Add ocean.
 		root = new Pane();
+
+		// Generate the Ocean.
+		oceanMap = new OceanMap(oceanSize, cellSize);
+		oceanMap.drawMap(root.getChildren());
+		
+		// Create the ships.
+		heroShip = new Ship(new Point(0, 0), oceanMap); 	// TODO: change start point?
+		// TODO: Pirates...
+		
+		// Add ocean, ships, and images to view.
+		loadImages();
 		
 		// Setup.
 		scene = new Scene(root, oceanSize*cellSize, oceanSize*cellSize);
-	
-		oceanStage.setScene(scene);
-		
 		oceanStage.setTitle("Christopher Columbus Sails the Ocean Blue");
-		
+		oceanStage.setScene(scene);
 		oceanStage.show();
 		
-		oceanMap.drawMap(root.getChildren());
-		
-		
+		// Start game.
 		startSailing();
-		
 	}
 	
 	public void startSailing() {
-		
-		// Load image: (1) file name, width, height, maintain ration(T/F), smoothing (T/F)
-		Image shipImage = new Image("images/ColumbusShip.png", cellSize, cellSize, true, true);
-		
-		// Now instantiate and load the image View. Actually this probably needs to be
-		// a class level variable so you would already have defined ImageView shipImageview
-		ImageView shipImageView = new ImageView(shipImage);
-		
-		shipImageView.setX(ship.getShipLocation().x * cellSize);
-		shipImageView.setY(ship.getShipLocation().y * cellSize);
-		
-		// Add ship to map.
-		root.getChildren().add(shipImageView);
-		
-		// ----------------
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
 
 			@Override
 			public void handle(KeyEvent ke) {
 				switch(ke.getCode()) {
 					case RIGHT:
-						ship.goEast();
+						heroShip.goEast();
 						break;
 					case LEFT:
-						ship.goWest();
+						heroShip.goWest();
 						break;
 					case UP:
-						ship.goNorth();
+						heroShip.goNorth();
 						break;
 					case DOWN:
-						ship.goSouth();
+						heroShip.goSouth();
 						break;
 					default:
 						break;				
 				}
-				shipImageView.setX(ship.getShipLocation().x*cellSize);
-				shipImageView.setY(ship.getShipLocation().y*cellSize);
+				heroShipImageView.setX(heroShip.getShipLocation().x*cellSize);
+				heroShipImageView.setY(heroShip.getShipLocation().y*cellSize);
 			}
 		});
+	}
+	
+	public void loadImages() {
+		// Load image: (1) file name, width, height, maintain ration(T/F), smoothing (T/F)
+		heroShipImage = new Image("images/ColumbusShip.png", cellSize, cellSize, true, true);
+		
+		heroShipImageView = new ImageView(heroShipImage);
+		heroShipImageView.setX(heroShip.getShipLocation().x * cellSize);
+		heroShipImageView.setY(heroShip.getShipLocation().y * cellSize);
+		
+		// Add ship to map.
+		root.getChildren().add(heroShipImageView);
 	}
 
 }

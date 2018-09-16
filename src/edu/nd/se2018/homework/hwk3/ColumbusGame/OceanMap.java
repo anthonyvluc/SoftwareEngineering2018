@@ -1,7 +1,5 @@
 package edu.nd.se2018.homework.hwk3.ColumbusGame;
 
-import java.awt.Point;
-
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
