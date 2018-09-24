@@ -3,8 +3,9 @@ package edu.nd.se2018.homework.HWK5.model.infrastructure.gate;
 import java.util.Observable;
 import java.util.Observer;
 
+import edu.nd.se2018.homework.HWK5.model.infrastructure.Direction;
 import edu.nd.se2018.homework.HWK5.model.vehicles.Train;
-import javafx.scene.layout.Pane;
+//import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
@@ -28,8 +29,8 @@ public class CrossingGate extends Observable implements Observer{
 	private IGateState gateClosing;
 	private IGateState gateOpening;
 	private IGateState currentGateState;
-	private Line line; 
-	private Pane root;
+	private Line line;
+//	private Pane root;
 	
 	String gateName;
 	
@@ -123,7 +124,7 @@ public class CrossingGate extends Observable implements Observer{
 				currentGateState.leaveStation();
 			else if(train.getVehicleX() < triggerPoint){
 				currentGateState.approachStation();
-			} 
+			}
 		}	
 	}
 }

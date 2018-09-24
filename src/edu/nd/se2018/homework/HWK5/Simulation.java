@@ -1,8 +1,10 @@
 package edu.nd.se2018.homework.HWK5;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 
+import edu.nd.se2018.homework.HWK5.model.infrastructure.Direction;
 import edu.nd.se2018.homework.HWK5.model.infrastructure.MapBuilder;
 import edu.nd.se2018.homework.HWK5.model.infrastructure.RailwayTracks;
 import edu.nd.se2018.homework.HWK5.model.infrastructure.Road;
@@ -23,6 +25,8 @@ public class Simulation extends Application{
 	private MapBuilder mapBuilder;
 	private MapDisplay mapDisplay;
 	
+	ArrayList<Train> trains = new ArrayList<Train>();
+	
 	@Override  
 	public void start(Stage stage) throws Exception {
 		
@@ -31,23 +35,21 @@ public class Simulation extends Application{
 		// Build infrastructure
 		mapBuilder = new MapBuilder();
 		mapDisplay = new MapDisplay(root, mapBuilder.getRoads(), mapBuilder.getTracks(),mapBuilder.getAllGates());					
-		mapDisplay.drawTracks();		
+		mapDisplay.drawTracks();
 		mapDisplay.drawRoad();
 		mapDisplay.drawGate();
-		
+
 		scene = new Scene(root,1200,1000);
 		stage.setTitle("Railways");
 		stage.setScene(scene);
 		stage.show();
-				
-		// Train
-		RailwayTracks track = mapBuilder.getTrack("Royal");
-		Train train = new Train(track.getEndX()+100,track.getEndY()-25);
-		root.getChildren().add(train.getImageView());
-		
-		for(CrossingGate gate: mapBuilder.getAllGates())
-			train.addObserver(gate);
-				
+
+		// Create Royal and Solaris Train
+		CrossingGate gateOne = mapBuilder.getGate("Gate1");
+		CrossingGate gateTwo = mapBuilder.getGate("Gate2");
+		createTrain("Royal", gateOne, gateTwo, Direction.WEST);
+//		createTrain("Solaris", gateOne, gateTwo, Direction.EAST);
+
 		// Sets up a repetitive loop i.e., in handle that runs the actual simulation
 		new AnimationTimer(){
 
@@ -55,13 +57,18 @@ public class Simulation extends Application{
 			public void handle(long now) {
 			
 				createCar();
-				train.move();
+
+				for (Train train: trains) {
+					train.move();				
+				}
 				
 				for(CrossingGate gate: mapBuilder.getAllGates())
 					gate.operateGate();
 				
-				if (train.offScreen())
-					train.reset();
+				for (Train train: trains) {
+					if (train.offScreen())
+						train.reset();					
+				}
 						
 				clearCars();				
 			}
@@ -91,6 +98,22 @@ public class Simulation extends Application{
 				}
 			}
 		}
+	}
+	
+	private void createTrain(String trainName, CrossingGate gateOne, CrossingGate gateTwo, Direction direction) {
+		RailwayTracks tracks = mapBuilder.getTrack(trainName);
+		Train train;
+		if (direction == Direction.WEST) {
+			train = new Train(tracks.getEndX()+100,tracks.getEndY()-25, direction);
+		} else {
+			train = new Train(-100,tracks.getEndY()-25, direction);
+		}
+		root.getChildren().add(train.getImageView());
+
+		train.addObserver(gateOne);
+		train.addObserver(gateTwo);
+		
+		trains.add(train);
 	}
 	
 	public static void main(String[] args){

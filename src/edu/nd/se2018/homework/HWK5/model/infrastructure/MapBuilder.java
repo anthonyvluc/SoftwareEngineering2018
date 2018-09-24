@@ -28,18 +28,19 @@ public class MapBuilder {
 	}
 
 	private void buildRoads(){
-		roads.put("Western Highway",new Road(new Point(800,0),new Point (800,1000),Direction.SOUTH,true,false));
-		roads.put("Skyway",new Road(new Point(400,0),new Point (400,1000),Direction.SOUTH,true,false));		
-		roads.put("EastWest",new Road(new Point(415,800),new Point (785,800),Direction.EAST,true,true));	
+		roads.put("Western Highway",new Road(new Point(400,0),new Point (400,1000),Direction.SOUTH,true,false));
+		roads.put("Skyway",new Road(new Point(800,0),new Point (800,1000),Direction.SOUTH,true,false));		
+		roads.put("EastWest",new Road(new Point(415,300),new Point (785,300),Direction.EAST,true,true));	
 	}
 	
 	private void buildCrossingGates(){
-		gates.put("Gate1", new CrossingGate(780,480, "Gate1"));
-		gates.put("Gate2", new CrossingGate(380,480, "Gate2"));		
+		gates.put("Gate1", new CrossingGate(380,480, "Gate1"));
+		gates.put("Gate2", new CrossingGate(780,480, "Gate2"));
 	}
 	
 	private void buildTracks(){
 		tracks.put("Royal", new RailwayTracks(new Point(0,500),new Point(1200,500)));
+		tracks.put("Solaris", new RailwayTracks(new Point(0,530),new Point(1200,530)));
 	}
 	
 	private void assignGatesToRoads(){
@@ -56,6 +57,10 @@ public class MapBuilder {
 		return gates.values();
 	}
 	
+	public CrossingGate getGate(String name){
+		return gates.get(name);
+	}
+	
 	public Collection<RailwayTracks> getTracks(){
 		return tracks.values();
 	}
@@ -65,6 +70,6 @@ public class MapBuilder {
 	}
 	
 	public RailwayTracks getTrack(String name){
-		return tracks.get("Royal");
+		return tracks.get(name);
 	}
 }
