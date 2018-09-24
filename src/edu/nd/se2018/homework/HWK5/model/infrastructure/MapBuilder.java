@@ -30,7 +30,7 @@ public class MapBuilder {
 	private void buildRoads(){
 		roads.put("Western Highway",new Road(new Point(400,0),new Point (400,1000),Direction.SOUTH,true,false));
 		roads.put("Skyway",new Road(new Point(800,0),new Point (800,1000),Direction.SOUTH,true,false));		
-		roads.put("EastWest",new Road(new Point(415,300),new Point (785,300),Direction.EAST,true,true));	
+		roads.put("EastWest",new Road(new Point(415,300),new Point (785,300),Direction.WEST,false,false));	
 	}
 	
 	private void buildCrossingGates(){
@@ -61,14 +61,18 @@ public class MapBuilder {
 		return gates.get(name);
 	}
 	
-	public Collection<RailwayTracks> getTracks(){
-		return tracks.values();
-	}
-	
 	public Collection<Road> getRoads(){
 		return roads.values();
 	}
 	
+	public Road getRoad(String name){
+		return roads.get(name);
+	}
+	
+	public Collection<RailwayTracks> getTracks(){
+		return tracks.values();
+	}
+
 	public RailwayTracks getTrack(String name){
 		return tracks.get(name);
 	}

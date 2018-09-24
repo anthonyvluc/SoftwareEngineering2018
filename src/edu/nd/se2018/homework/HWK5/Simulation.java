@@ -58,19 +58,22 @@ public class Simulation extends Application{
 			
 				createCar();
 
+				// Handle car moving to from east road to west
+//				determineRoadChange();
+
+				// Operate train and gates
 				for (Train train: trains) {
 					train.move();				
-				}
-				
+				}				
 				for(CrossingGate gate: mapBuilder.getAllGates()) {
 					gate.operateGate();					
 				}
 				
+				// Handle off-screen objects
 				for (Train train: trains) {
 					if (train.offScreen())
 						train.reset();					
-				}
-						
+				}						
 				clearCars();				
 			}
 		}.start();
@@ -116,6 +119,23 @@ public class Simulation extends Application{
 		train.addObserver(gateTwo);
 		
 		trains.add(train);
+	}
+	
+	private void determineRoadChange() {
+		Road skywayRoad = mapBuilder.getRoad("Skyway");
+		Road eastWestRoad = mapBuilder.getRoad("EastWest");
+		ArrayList<Car> carList = skywayRoad.getCarFactory().getCarList();
+		for (Car car: carList) {
+			if ((eastWestRoad.getStartY()-car.getVehicleY())<=1) {
+				// If the car is within range to turn onto the connecting road
+				int num = (int)(Math.random()*5);
+				if (num == 1) {
+					// 1/5 chance it decides to take road to western road.
+					car.setDirection(eastWestRoad.getDirection());
+					
+				}
+			}
+		}
 	}
 	
 	public static void main(String[] args){

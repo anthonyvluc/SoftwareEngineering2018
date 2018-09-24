@@ -39,7 +39,7 @@ public class CrossingGate extends Observable implements Observer{
 		anchorY = yPosition;
 		movingX = anchorX;
 		movingY = anchorY-60;
-		triggerRange = 250;
+		triggerRange = 275;
 		trains = new HashSet<Train>();
 		
 		// Gate elements
@@ -118,12 +118,16 @@ public class CrossingGate extends Observable implements Observer{
 	public void update(Observable o, Object arg) {
 		if (o instanceof Train){
 			Train train = (Train)o;
+
+			// Check if there are any trains in vicinity.
 			if (Math.abs(train.getVehicleX() - anchorX) > triggerRange) {
 				trains.remove(train);
 			} else {
 				// Train is in range of gate
 				trains.add(train);
 			}
+			
+			// Operate gate based on number of nearby trains.
 			if (trains.size() == 0) {
 				currentGateState.leaveStation();
 			} else {
