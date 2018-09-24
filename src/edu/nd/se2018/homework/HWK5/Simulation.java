@@ -62,8 +62,9 @@ public class Simulation extends Application{
 					train.move();				
 				}
 				
-				for(CrossingGate gate: mapBuilder.getAllGates())
-					gate.operateGate();
+				for(CrossingGate gate: mapBuilder.getAllGates()) {
+					gate.operateGate();					
+				}
 				
 				for (Train train: trains) {
 					if (train.offScreen())
@@ -99,14 +100,15 @@ public class Simulation extends Application{
 			}
 		}
 	}
-	
+
 	private void createTrain(String trainName, int speed, CrossingGate gateOne, CrossingGate gateTwo, Direction direction) {
 		RailwayTracks tracks = mapBuilder.getTrack(trainName);
 		Train train;
 		if (direction == Direction.WEST) {
 			train = new Train(tracks.getEndX()+100,tracks.getEndY()-25, speed, direction);
 		} else {
-			train = new Train(-100,tracks.getEndY()-25, speed, direction);
+			// Assume direction is EAST
+			train = new Train(tracks.getStartX()-100,tracks.getStartY()-25, speed, direction);
 		}
 		root.getChildren().add(train.getImageView());
 

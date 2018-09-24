@@ -1,5 +1,6 @@
 package edu.nd.se2018.homework.HWK5.model.infrastructure.gate;
 
+import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -20,6 +21,7 @@ public class CrossingGate extends Observable implements Observer{
 	private int movingX;
 	private int movingY;
 	private int triggerRange;
+	private HashSet<Train> trains;
 
 	private IGateState gateClosed;
 	private IGateState gateOpen;
@@ -38,6 +40,7 @@ public class CrossingGate extends Observable implements Observer{
 		movingX = anchorX;
 		movingY = anchorY-60;
 		triggerRange = 250;
+		trains = new HashSet<Train>();
 		
 		// Gate elements
 		line = new Line(anchorX, anchorY,movingX,movingY);
@@ -116,7 +119,13 @@ public class CrossingGate extends Observable implements Observer{
 		if (o instanceof Train){
 			Train train = (Train)o;
 			if (Math.abs(train.getVehicleX() - anchorX) > triggerRange) {
-				currentGateState.leaveStation();			
+				trains.remove(train);
+			} else {
+				// Train is in range of gate
+				trains.add(train);
+			}
+			if (trains.size() == 0) {
+				currentGateState.leaveStation();
 			} else {
 				currentGateState.approachStation();	
 			}
