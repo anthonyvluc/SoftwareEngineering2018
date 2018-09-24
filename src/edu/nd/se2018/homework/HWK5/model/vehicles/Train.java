@@ -19,11 +19,13 @@ public class Train extends Observable implements IVehicle{
 	private Image img;
 	private ImageView imgView;
 	private int trainLength = 35;
+	private int speed;
 	private Direction direction;
 	
-	public Train(int x, int y, Direction direction){
-		this.currentX = x;
-		this.currentY = y;
+	public Train(int x, int y, int speed, Direction direction){
+		this.currentX  = x;
+		this.currentY  = y;
+		this.speed     = speed;
 		this.direction = direction;
 		originalX = x;
 		img = new Image("images/Train.PNG",120,trainLength,false,false);
@@ -52,10 +54,10 @@ public class Train extends Observable implements IVehicle{
 	
 	public void move(){
 		if (direction == Direction.WEST) {
-			currentX-=2;
+			currentX-=speed;
 		} else {
 			// Assume it is EAST
-			currentX+=2;
+			currentX+=speed;
 		}
 		imgView.setX(currentX);
 		setChanged();

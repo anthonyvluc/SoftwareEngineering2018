@@ -47,8 +47,8 @@ public class Simulation extends Application{
 		// Create Royal and Solaris Train
 		CrossingGate gateOne = mapBuilder.getGate("Gate1");
 		CrossingGate gateTwo = mapBuilder.getGate("Gate2");
-		createTrain("Royal", gateOne, gateTwo, Direction.WEST);
-//		createTrain("Solaris", gateOne, gateTwo, Direction.EAST);
+		createTrain("Royal", 2, gateOne, gateTwo, Direction.WEST);
+		createTrain("Solaris", 3, gateOne, gateTwo, Direction.EAST);
 
 		// Sets up a repetitive loop i.e., in handle that runs the actual simulation
 		new AnimationTimer(){
@@ -100,13 +100,13 @@ public class Simulation extends Application{
 		}
 	}
 	
-	private void createTrain(String trainName, CrossingGate gateOne, CrossingGate gateTwo, Direction direction) {
+	private void createTrain(String trainName, int speed, CrossingGate gateOne, CrossingGate gateTwo, Direction direction) {
 		RailwayTracks tracks = mapBuilder.getTrack(trainName);
 		Train train;
 		if (direction == Direction.WEST) {
-			train = new Train(tracks.getEndX()+100,tracks.getEndY()-25, direction);
+			train = new Train(tracks.getEndX()+100,tracks.getEndY()-25, speed, direction);
 		} else {
-			train = new Train(-100,tracks.getEndY()-25, direction);
+			train = new Train(-100,tracks.getEndY()-25, speed, direction);
 		}
 		root.getChildren().add(train.getImageView());
 

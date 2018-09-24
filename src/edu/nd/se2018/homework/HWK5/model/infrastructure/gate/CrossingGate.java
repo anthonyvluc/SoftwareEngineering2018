@@ -3,9 +3,7 @@ package edu.nd.se2018.homework.HWK5.model.infrastructure.gate;
 import java.util.Observable;
 import java.util.Observer;
 
-import edu.nd.se2018.homework.HWK5.model.infrastructure.Direction;
 import edu.nd.se2018.homework.HWK5.model.vehicles.Train;
-//import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
@@ -21,8 +19,7 @@ public class CrossingGate extends Observable implements Observer{
 	private int anchorY;
 	private int movingX;
 	private int movingY;
-	private int triggerPoint;
-	private int exitPoint;
+	private int triggerRange;
 
 	private IGateState gateClosed;
 	private IGateState gateOpen;
@@ -30,7 +27,6 @@ public class CrossingGate extends Observable implements Observer{
 	private IGateState gateOpening;
 	private IGateState currentGateState;
 	private Line line;
-//	private Pane root;
 	
 	String gateName;
 	
@@ -41,8 +37,7 @@ public class CrossingGate extends Observable implements Observer{
 		anchorY = yPosition;
 		movingX = anchorX;
 		movingY = anchorY-60;
-		triggerPoint = anchorX+250;
-		exitPoint = anchorX-250;
+		triggerRange = 250;
 		
 		// Gate elements
 		line = new Line(anchorX, anchorY,movingX,movingY);
@@ -120,10 +115,10 @@ public class CrossingGate extends Observable implements Observer{
 	public void update(Observable o, Object arg) {
 		if (o instanceof Train){
 			Train train = (Train)o;
-			if (train.getVehicleX() < exitPoint)
-				currentGateState.leaveStation();
-			else if(train.getVehicleX() < triggerPoint){
-				currentGateState.approachStation();
+			if (Math.abs(train.getVehicleX() - anchorX) > triggerRange) {
+				currentGateState.leaveStation();			
+			} else {
+				currentGateState.approachStation();	
 			}
 		}	
 	}
