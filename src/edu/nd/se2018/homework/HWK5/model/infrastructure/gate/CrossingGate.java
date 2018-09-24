@@ -73,10 +73,10 @@ public class CrossingGate extends Observable implements Observer{
 			line.setEndX(movingX);
 			line.setEndY(movingY);
 		} else {
-			currentGateState.gateFinishedOpening();
+			currentGateState.gateFinishedClosing();
 		}
 	}
-	
+
 	public void open(){
 		if (movingX>anchorX){
 			movingX-=1;
