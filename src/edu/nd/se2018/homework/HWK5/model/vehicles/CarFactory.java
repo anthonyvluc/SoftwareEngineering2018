@@ -41,7 +41,7 @@ public class CarFactory {
 			for(CrossingGate gate: gates){
 				gate.addObserver(car);
 				if(gate != null && gate.getTrafficCommand()=="STOP")
-					car.setGateDownFlag(false);
+					car.setGateDownFlag(true);
 			}
 			
 			// Each car must observe the car infront of it so it doesn't collide with it.
