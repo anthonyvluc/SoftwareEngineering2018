@@ -26,6 +26,7 @@ public class Simulation extends Application{
 	private MapDisplay mapDisplay;
 	
 	ArrayList<Train> trains = new ArrayList<Train>();
+	ArrayList<Car> carsInMiddleRoad = new ArrayList<Car>();
 	
 	@Override  
 	public void start(Stage stage) throws Exception {
@@ -123,17 +124,21 @@ public class Simulation extends Application{
 	
 	private void determineRoadChange() {
 		
-		// Determine which car to move.
 		Road skywayRoad = mapBuilder.getRoad("Skyway");
 		Road eastWestRoad = mapBuilder.getRoad("EastWest");
+		Road westHighwayRoad = mapBuilder.getRoad("Western Highway");
 		ArrayList<Car> skywayCarList = skywayRoad.getCarFactory().getCarList();
+		ArrayList<Car> westHighwayCarList = westHighwayRoad.getCarFactory().getCarList();
+
+		// Determine which car to move.
 		Car carToMove = null;
 		for (Car car: skywayCarList) {
-			if (Math.abs(eastWestRoad.getStartY()-car.getVehicleY())<=1) {
+			if (Math.abs(eastWestRoad.getEndY()-car.getVehicleY()-eastWestRoad.getRoadWidth())<=1) {
 				// If the car is within range to turn onto the connecting road
 				if (((int)(Math.random()*5)) == 3) {
 					// 1/5 chance it decides to take road to western road.
 					carToMove = car;
+					carsInMiddleRoad.add(carToMove);
 					break;
 				}
 			}
@@ -153,9 +158,6 @@ public class Simulation extends Application{
 			}
 			
 			// Handle skyway car and observer list.
-			Road westHighwayRoad = mapBuilder.getRoad("Western Highway");
-			ArrayList<Car> westHighwayCarList = westHighwayRoad.getCarFactory().getCarList();
-			System.out.println("carindex: " + carToMoveIndex);
 			Car followingCar = null;
 			Car leadingCar = null;
 			try {
@@ -176,7 +178,6 @@ public class Simulation extends Application{
 				}
 			}
 
-
 			// Remove car from east road list.
 			skywayCarList.remove(carToMove);
 			
@@ -186,6 +187,15 @@ public class Simulation extends Application{
 			// Begin observing west highway gates
 			for (CrossingGate gate: westHighwayRoad.getGates()) {
 				gate.addObserver(carToMove);
+			}
+		}
+		
+		// Update cars to turn onto western highway.
+		for (Car car: carsInMiddleRoad) {
+			if (Math.abs(eastWestRoad.getStartX()-car.getVehicleX()-eastWestRoad.getRoadWidth())<=1) {
+				// If the car is within range to turn onto the connecting road
+				// Set movement direction of car.
+				car.setDirection(westHighwayRoad.getDirection());
 			}
 		}
 	}
