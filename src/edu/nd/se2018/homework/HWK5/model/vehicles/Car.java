@@ -121,7 +121,7 @@ public class Car extends Observable implements IVehicle, Observer {
 	}
 	
 	public boolean offScreen() {
-		if (currentY > 1020)
+		if (currentY > 1020 || currentX < -20)
 			return true;
 		else
 			return false;			

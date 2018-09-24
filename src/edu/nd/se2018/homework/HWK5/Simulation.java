@@ -59,7 +59,7 @@ public class Simulation extends Application{
 				createCar();
 
 				// Handle car moving to from east road to west
-//				determineRoadChange();
+				determineRoadChange();
 
 				// Operate train and gates
 				for (Train train: trains) {
@@ -122,18 +122,70 @@ public class Simulation extends Application{
 	}
 	
 	private void determineRoadChange() {
+		
+		// Determine which car to move.
 		Road skywayRoad = mapBuilder.getRoad("Skyway");
 		Road eastWestRoad = mapBuilder.getRoad("EastWest");
-		ArrayList<Car> carList = skywayRoad.getCarFactory().getCarList();
-		for (Car car: carList) {
-			if ((eastWestRoad.getStartY()-car.getVehicleY())<=1) {
+		ArrayList<Car> skywayCarList = skywayRoad.getCarFactory().getCarList();
+		Car carToMove = null;
+		for (Car car: skywayCarList) {
+			if (Math.abs(eastWestRoad.getStartY()-car.getVehicleY())<=1) {
 				// If the car is within range to turn onto the connecting road
-				int num = (int)(Math.random()*5);
-				if (num == 1) {
+				if (((int)(Math.random()*5)) == 3) {
 					// 1/5 chance it decides to take road to western road.
-					car.setDirection(eastWestRoad.getDirection());
-					
+					carToMove = car;
+					break;
 				}
+			}
+		}
+		
+		// Move car to other road.
+		if (carToMove != null) {
+			// Get index of car to move.
+			int carToMoveIndex = skywayCarList.indexOf(carToMove);
+
+			// Set movement direction of car.
+			carToMove.setDirection(eastWestRoad.getDirection());
+			
+			// Stop car from observing east gates.
+			for (CrossingGate gate: skywayRoad.getGates()) {
+				gate.deleteObserver(carToMove);
+			}
+			
+			// Handle skyway car and observer list.
+			Road westHighwayRoad = mapBuilder.getRoad("Western Highway");
+			ArrayList<Car> westHighwayCarList = westHighwayRoad.getCarFactory().getCarList();
+			System.out.println("carindex: " + carToMoveIndex);
+			Car followingCar = null;
+			Car leadingCar = null;
+			try {
+				// Get instances of previous and next cars
+				followingCar = skywayCarList.get(carToMoveIndex+1);
+				leadingCar = skywayCarList.get(carToMoveIndex-1);
+			} catch (IndexOutOfBoundsException e) {
+				// Do nothing, allow it to be null
+			}
+			
+			if (followingCar != null) {
+				// Make the next car no longer follow this car.
+				followingCar.deleteObserver(carToMove);
+
+				// Make the previous car observe the car ahead.				
+				if (leadingCar != null) {
+					leadingCar.addObserver(followingCar);	
+				}
+			}
+
+
+			// Remove car from east road list.
+			skywayCarList.remove(carToMove);
+			
+			// Add car to west highway list
+			westHighwayCarList.add(carToMove);
+			
+			// Begin observing west highway gates
+			for (CrossingGate gate: westHighwayRoad.getGates()) {
+				gate.addObserver(carToMove);
 			}
 		}
 	}

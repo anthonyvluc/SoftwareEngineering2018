@@ -56,6 +56,10 @@ public class Road {
 		return carFactory;
 	}
 	
+	public Collection<CrossingGate> getGates() {
+		return gates;
+	}
+	
 	public int getStartX(){
 		return startX;
 	}
