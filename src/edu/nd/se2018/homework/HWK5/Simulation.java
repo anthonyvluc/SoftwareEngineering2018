@@ -227,8 +227,8 @@ public class Simulation extends Application{
 		
 		// Update cars to turn onto western highway.
 		for (int i = 0; i < carsInMiddleRoad.size(); ++i) {
-			// Add other car as observer
 			Car currentCar = carsInMiddleRoad.get(i);
+			// Add next car on road as observer
 			try {
 				Car nextCar = carsInMiddleRoad.get(i+1);
 				currentCar.addObserver(nextCar);
@@ -240,6 +240,7 @@ public class Simulation extends Application{
 				// If the car is within range to turn onto the connecting road
 				// Set movement direction of car.
 				currentCar.setDirection(westHighwayRoad.getDirection());
+				currentCar.setMergeStatus(true);
 				carsToMerge.add(currentCar);
 			}
 		}

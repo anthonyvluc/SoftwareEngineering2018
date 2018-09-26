@@ -23,6 +23,7 @@ public class Car extends Observable implements IVehicle, Observer {
 	private double leadCarX = -1;
 	private double leadCarY = -1;  // Current Y position of car directly infront of this one
 	private double speed = 0.5;
+	private boolean isTryingToMerge = false;
 
 	private Direction direction;
 		
@@ -69,6 +70,18 @@ public class Car extends Observable implements IVehicle, Observer {
 			canMove = false;
 		}
 		
+		// Third case.
+		if (isTryingToMerge == true) {
+			if ((leadCarY - getVehicleY()) > 0) {
+				// Observed car has not driven past the car trying to merge.
+				canMove = false;				
+			} else {
+				// Allow it to merge
+				canMove = true;
+				isTryingToMerge = false;
+			}
+		}
+		
 		if (canMove) {
 			switch(direction) {
 				case NORTH:
@@ -111,6 +124,10 @@ public class Car extends Observable implements IVehicle, Observer {
 	
 	public void setDirection(Direction direction) {
 		this.direction = direction;
+	}
+	
+	public void setMergeStatus(boolean status) {
+		this.isTryingToMerge = status;
 	}
 	
 	public void setSpeed(double speed) {

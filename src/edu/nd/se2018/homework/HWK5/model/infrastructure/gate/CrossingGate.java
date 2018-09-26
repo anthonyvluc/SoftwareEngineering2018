@@ -1,5 +1,6 @@
 package edu.nd.se2018.homework.HWK5.model.infrastructure.gate;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Observable;
 import java.util.Observer;
@@ -21,7 +22,7 @@ public class CrossingGate extends Observable implements Observer{
 	private int movingX;
 	private int movingY;
 	private int triggerRange;
-	private HashSet<Train> trains;
+	private Collection<Train> trains;
 
 	private IGateState gateClosed;
 	private IGateState gateOpen;
