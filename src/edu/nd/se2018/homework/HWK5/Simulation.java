@@ -27,6 +27,7 @@ public class Simulation extends Application{
 	
 	ArrayList<Train> trains = new ArrayList<Train>();
 	ArrayList<Car> carsInMiddleRoad = new ArrayList<Car>();
+	ArrayList<Car> carsToMerge = new ArrayList<Car>();
 	
 	@Override  
 	public void start(Stage stage) throws Exception {
@@ -124,6 +125,8 @@ public class Simulation extends Application{
 	
 	private void determineRoadChange() {
 		
+		int threshold = 10;
+		
 		Road skywayRoad = mapBuilder.getRoad("Skyway");
 		Road eastWestRoad = mapBuilder.getRoad("EastWest");
 		Road westHighwayRoad = mapBuilder.getRoad("Western Highway");
@@ -133,7 +136,7 @@ public class Simulation extends Application{
 		// Determine which car to move.
 		Car carToMove = null;
 		for (Car car: skywayCarList) {
-			if (Math.abs(eastWestRoad.getEndY()-car.getVehicleY()-eastWestRoad.getRoadWidth())<=5) {
+			if (Math.abs(eastWestRoad.getEndY()-car.getVehicleY())<=threshold) {
 				// If the car is within range to turn onto the connecting road
 				if (((int)(Math.random()*5)) == 3) {
 					// 1/5 chance it decides to take road to western road.
@@ -146,72 +149,107 @@ public class Simulation extends Application{
 		
 		// Move car to other road.
 		if (carToMove != null) {
+			// Set movement direction of car.
+			carToMove.setDirection(eastWestRoad.getDirection());
+
+			/* Handle skyway car and observer list. */
+
 			// Get index of car to move.
 			int carToMoveIndex = skywayCarList.indexOf(carToMove);
 
-			// Set movement direction of car.
-			carToMove.setDirection(eastWestRoad.getDirection());
-			
-			/* Handle skyway car and observer list. */
 			Car followingCar = null;
 			Car leadingCar = null;
 			try {
-				// Get instances of previous and next cars
+				// Get instances of car behind
 				followingCar = skywayCarList.get(carToMoveIndex+1);
+			} catch (IndexOutOfBoundsException e) {
+				// Do nothing, allow it to be null
+			}
+			try {
+				// Get instances of car in front
 				leadingCar = skywayCarList.get(carToMoveIndex-1);
 			} catch (IndexOutOfBoundsException e) {
 				// Do nothing, allow it to be null
 			}
 			
+			// Stop observing the car in front			
+			if (leadingCar != null) {
+				leadingCar.deleteObserver(carToMove);	
+			}
+			
+			// Make car behind follow car in front
 			if (followingCar != null) {
-				// Make the next car no longer follow this car.
-				followingCar.deleteObserver(carToMove);
-
-				// Make the previous car observe the car ahead.				
+				followingCar.removeLeadCar();
+				carToMove.deleteObserver(followingCar);
 				if (leadingCar != null) {
 					leadingCar.addObserver(followingCar);	
-				}
+				}	
 			}
 
 			// Remove car from east road list.
 			skywayCarList.remove(carToMove);
-			
 
 			/* Handle west highway car and observer list. */
 			Car newFollowingCar = null;
 			Car newLeadingCar = null;
 
-			// Add car to front of west highway list
-			int newIndex = 0;
+			// Add car to end of west highway list
+			int newIndex = westHighwayCarList.size();
 			westHighwayCarList.add(newIndex, carToMove);
 
 			try {
-				// Get instances of previous and next cars
+				// Get instances of new car behind
 				newFollowingCar = westHighwayCarList.get(newIndex+1);
+			} catch (IndexOutOfBoundsException e) {
+				// Do nothing, allow it to be null
+			}
+			try {
+				// Get instances of new car in front
 				newLeadingCar = westHighwayCarList.get(newIndex-1);
 			} catch (IndexOutOfBoundsException e) {
 				// Do nothing, allow it to be null
 			}
-			
-			if (newFollowingCar != null) {
-				// Make the next car no longer follow this car.
-				newFollowingCar.deleteObserver(carToMove);
 
-				// Make the previous car observe the car ahead.				
+			// Begin observing car in front				
+			if (newLeadingCar != null) {
+				newLeadingCar.addObserver(carToMove);	
+			}
+
+			// Make new car behind follow the car to move.
+			if (newFollowingCar != null) {
+				newFollowingCar.removeLeadCar();
+				carToMove.addObserver(newLeadingCar);				
 				if (newLeadingCar != null) {
-					newLeadingCar.addObserver(newFollowingCar);	
+					newLeadingCar.deleteObserver(newFollowingCar);
 				}
 			}
 		}
 		
 		// Update cars to turn onto western highway.
-		for (Car car: carsInMiddleRoad) {
-			if (Math.abs(eastWestRoad.getStartX()-car.getVehicleX()-eastWestRoad.getRoadWidth())<=5) {
+		for (int i = 0; i < carsInMiddleRoad.size(); ++i) {
+			// Add other car as observer
+			Car currentCar = carsInMiddleRoad.get(i);
+			try {
+				Car nextCar = carsInMiddleRoad.get(i+1);
+				currentCar.addObserver(nextCar);
+			} catch (IndexOutOfBoundsException e) {
+				break;
+			}
+			// Turn onto west highway
+			if (Math.abs(eastWestRoad.getStartX()-currentCar.getVehicleX()-westHighwayRoad.getRoadWidth())<=threshold) {
 				// If the car is within range to turn onto the connecting road
 				// Set movement direction of car.
-				car.setDirection(westHighwayRoad.getDirection());
+				currentCar.setDirection(westHighwayRoad.getDirection());
+				carsToMerge.add(currentCar);
 			}
 		}
+		
+		// Update car lists.
+		for (Car car: carsToMerge) {
+			carsInMiddleRoad.remove(car);
+			westHighwayCarList.add(car);
+		}
+		carsToMerge.clear();
 	}
 	
 	public static void main(String[] args){

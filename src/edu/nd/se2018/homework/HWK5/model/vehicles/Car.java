@@ -20,6 +20,7 @@ public class Car extends Observable implements IVehicle, Observer {
 	private double currentY = 0;
 	private double originalY = 0;
 	private boolean gateDown = false;
+	private double leadCarX = -1;
 	private double leadCarY = -1;  // Current Y position of car directly infront of this one
 	private double speed = 0.5;
 
@@ -132,7 +133,7 @@ public class Car extends Observable implements IVehicle, Observer {
 	}
 	
 	public double getDistanceToLeadCar() {
-		return Math.abs(leadCarY-getVehicleY());
+		return Math.hypot(leadCarX-getVehicleX(), leadCarY-getVehicleY());
 	}
 	
 	public void removeLeadCar(){
@@ -142,8 +143,9 @@ public class Car extends Observable implements IVehicle, Observer {
 	@Override
 	public void update(Observable o, Object arg1) {
 		if (o instanceof Car) {
+			leadCarX = (((Car)o).getVehicleX());
 			leadCarY = (((Car)o).getVehicleY());
-			if (leadCarY > 1020) {
+			if (leadCarY > 1020 || leadCarX < -20) {
 				leadCarY = -1;
 			}
 		}

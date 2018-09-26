@@ -49,17 +49,17 @@ public class CarFactory {
 			car.setSpeed((2-speedVariable)*1.5); 
 			car.setDirection(direction);
 			
+			// Each car must observe the car in front of it so it doesn't collide with it.
+			if (previousCar != null) {
+				previousCar.addObserver(car);				
+			}
+			
 			// All cars created by this factory must be aware of crossing gates in the road
 			for(CrossingGate gate: gates){
 				gate.addObserver(car);
 				if(gate != null && gate.getTrafficCommand()=="STOP") {
 					car.setGateDownFlag(true);					
 				}
-			}
-			
-			// Each car must observe the car in front of it so it doesn't collide with it.
-			if (previousCar != null) {
-				previousCar.addObserver(car);				
 			}
 			
 			cars.add(car);
