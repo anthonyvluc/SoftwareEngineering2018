@@ -1,22 +1,17 @@
 package edu.nd.se2018.homework.HWK6.ChipsChallengeGame.view;
 
 import java.awt.Point;
-import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.LevelMap;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip.Direction;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class ChipsChallengeUI extends Application implements Observer {
@@ -61,11 +56,11 @@ public class ChipsChallengeUI extends Application implements Observer {
 
 		// Generate the level.
 		levelMap = new LevelMap(levelSize, cellSize, root.getChildren());
+		levelMap.drawLevel(root.getChildren());
 		
 		// Create Chip and add to view.
 		chip = new Chip(new Point(12, 12), levelMap, cellSize);
 		root.getChildren().add(chip.getImageView());
-		
 		
 		// Setup.
 		gameScene = new Scene(root, levelSize*cellSize, levelSize*cellSize);
@@ -76,8 +71,28 @@ public class ChipsChallengeUI extends Application implements Observer {
 
 	
 	protected void startChipsChallenge() {
-		// TODO Auto-generated method stub
-		
+		// Handle user keyboard inputs.
+		gameScene.setOnKeyPressed(new EventHandler<KeyEvent>(){
+			@Override
+			public void handle(KeyEvent ke) {
+				switch(ke.getCode()) {
+					case RIGHT:
+						chip.move(Direction.EAST);
+						break;
+					case LEFT:
+						chip.move(Direction.WEST);
+						break;
+					case UP:
+						chip.move(Direction.NORTH);
+						break;
+					case DOWN:
+						chip.move(Direction.SOUTH);
+						break;
+					default:
+						break;				
+				}				
+			}			
+		});
 	}
 
 	
