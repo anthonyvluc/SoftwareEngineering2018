@@ -3,6 +3,15 @@ Here, I setup my initial program setup. I have a levelGrid which Chip can move a
 
 Please see my UML diagram for an idea of what is left to do.
 
+# Completed
+* Movement of Chip around map
+* Loading of basic map
+* Simple bounds checking
+
+
+# In-Progress
+* Setting up MVC
+
 
 Thank you!
 Anthony
