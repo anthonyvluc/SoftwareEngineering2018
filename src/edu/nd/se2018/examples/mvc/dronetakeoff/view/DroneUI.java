@@ -28,7 +28,7 @@ public class DroneUI extends Application implements Observer{
 	Image droneImage;
 	
 	private void setDroneImage(Drone drone){
-		Image droneImage = new Image("images\\drone4.png",100,100,true,true);	
+		Image droneImage = new Image("images/drone4.png",100,100,true,true);	
 		droneImageView = new ImageView(droneImage);
 		droneImageView.setX(drone.getCoordinates().x);
 		droneImageView.setY(drone.getCoordinates().y);	

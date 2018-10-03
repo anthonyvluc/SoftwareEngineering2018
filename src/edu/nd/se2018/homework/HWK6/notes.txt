@@ -1,0 +1,5 @@
+MVC: 
+
+State Pattern: Chip State, Door State
+
+Decorator Pattern: Equipment/Keys
