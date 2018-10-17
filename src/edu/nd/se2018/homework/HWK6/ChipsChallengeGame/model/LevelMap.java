@@ -2,6 +2,8 @@ package edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip;
@@ -26,6 +28,7 @@ public abstract class LevelMap {
 
 	public Tile[][] levelGrid;
 	private List<Door> doors;
+	public Collection<Point> waters;
 
 	ObservableList<Node> root;
 
@@ -37,6 +40,7 @@ public abstract class LevelMap {
 
 		this.levelGrid = new Tile[dimension][dimension];
 		doors = new ArrayList<Door>();
+		waters = new HashSet<Point>();
 		
 		loadInitialMap(); // Load initial as all floors.
 		levelBuilder = new LevelBuilder(this);

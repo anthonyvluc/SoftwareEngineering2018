@@ -28,6 +28,7 @@ public class LevelBuilder {
 		
 		for (Point p: squares) {
 			levelMap.levelGrid[p.x][p.y] = Tile.WATER;
+			levelMap.waters.add(p);
 		}
 	}
 }

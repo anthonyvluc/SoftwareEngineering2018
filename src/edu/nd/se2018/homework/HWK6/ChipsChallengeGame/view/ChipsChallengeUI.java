@@ -110,6 +110,10 @@ public class ChipsChallengeUI extends Application implements Observer {
 			if (chip.getCoordinates().equals(levelMap.getPortalCoordinates())) {
 				System.out.println("complete!!!");
 			}
+			
+			if (levelMap.waters.contains(chip.getCoordinates())) {
+				System.out.println("splash!!!");
+			}
 		}
 	}
 	
