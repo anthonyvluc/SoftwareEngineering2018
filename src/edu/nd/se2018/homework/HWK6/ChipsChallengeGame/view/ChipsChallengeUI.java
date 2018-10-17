@@ -6,6 +6,8 @@ import java.util.Observer;
 
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model.LevelMap;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model.LevelOneMap;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model.LevelTwoMap;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -53,8 +55,9 @@ public class ChipsChallengeUI extends Application implements Observer {
 		// Initialize pane of application.
 		root = new AnchorPane();
 
-		// Generate the level.
-		levelMap = new LevelMap(levelSize, cellSize, root.getChildren());
+		// Generate the first level.
+		levelMap = new LevelOneMap(levelSize, cellSize, root.getChildren());
+//		levelMap = new LevelTwoMap(levelSize, cellSize, root.getChildren());
 		levelMap.drawLevel(root.getChildren());
 		
 		// Create Chip and add to view.

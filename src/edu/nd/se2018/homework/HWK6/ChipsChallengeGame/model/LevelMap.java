@@ -8,16 +8,17 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
-public class LevelMap {
-	
+public abstract class LevelMap {
+
 	final int dimension;
 	final int scale;
 	
-	private Point portalCoordinates;
-	
+	protected Point portalCoordinates;
+
 	public Tile[][] levelGrid;
 
 	ObservableList<Node> root;
+
 	
 	public LevelMap(int dimension, int scale, ObservableList<Node> root) {
 		this.dimension = dimension;
@@ -25,20 +26,8 @@ public class LevelMap {
 		this.levelGrid = new Tile[dimension][dimension];
 		
 		this.root = root;
-		
-		portalCoordinates = new Point(0, 0);
-		
-		loadInitialMap();
 	}
-	
-	private void loadInitialMap() {
-		for (int i = 0; i < dimension; ++i) {
-			for (int j = 0; j < dimension; ++j) {
-				levelGrid[i][j] = Tile.FLOOR;
-			}
-		}
-	}
-	
+
 	public void drawLevel(ObservableList<Node> root) {
 		for (int i = 0; i < dimension; ++i) {
 			for (int j = 0; j < dimension; ++j) {
@@ -58,8 +47,16 @@ public class LevelMap {
 			}
 		}
 	}
+
+	protected void loadInitialMap() {
+		for (int i = 0; i < dimension; ++i) {
+			for (int j = 0; j < dimension; ++j) {
+				levelGrid[i][j] = Tile.FLOOR;
+			}
+		}
+	}
 	
-	public boolean isValidChipPosition(Point position) {
+	protected boolean isValidChipPosition(Point position) {
 		boolean bool = true;
 		if (levelGrid[position.x][position.y] != Tile.FLOOR) {
 			bool = false;
@@ -70,5 +67,8 @@ public class LevelMap {
 	public Point getPortalCoordinates() {
 		return portalCoordinates;
 	}
-	
+
+	protected void setPortalCoordinates(Point point) {
+		this.portalCoordinates = point;
+	}	
 }
