@@ -58,7 +58,16 @@ public abstract class LevelMap {
 	
 	protected boolean isValidChipPosition(Point position) {
 		boolean bool = true;
-		if (levelGrid[position.x][position.y] != Tile.FLOOR) {
+		Tile t;
+
+		try {
+			t = levelGrid[position.x][position.y];
+		} catch (ArrayIndexOutOfBoundsException exception) {
+			// Make out of bounds a wall
+			t = Tile.WALL;
+		}
+		
+		if (t != Tile.FLOOR) {
 			bool = false;
 		}
 		return bool;

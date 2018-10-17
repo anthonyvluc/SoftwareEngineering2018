@@ -4,9 +4,6 @@ import java.awt.Point;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
 
 public class LevelOneMap extends LevelMap {
 	
