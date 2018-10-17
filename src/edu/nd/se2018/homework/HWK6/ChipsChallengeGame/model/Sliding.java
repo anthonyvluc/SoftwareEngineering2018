@@ -1,6 +1,6 @@
 package edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model;
 
-public class Sliding implements IChipState {
+public class Sliding implements IMovementState {
 
 	ChipState chipState;
 	

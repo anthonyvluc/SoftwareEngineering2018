@@ -8,9 +8,9 @@ import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.LevelMap.Tile;
 public class ChipState {
 
 	Point chipCoordinates;
-	IChipState runningState;
-	IChipState slidingState;
-	IChipState currentState;
+	IMovementState runningState;
+	IMovementState slidingState;
+	IMovementState currentState;
 	private LevelMap levelMap;
 
 	public ChipState(Point coordinates, LevelMap levelMap) {
@@ -33,7 +33,7 @@ public class ChipState {
 		chipCoordinates = point;
 	}
 
-	public void setChipState(IChipState chipState){
+	public void setChipState(IMovementState chipState){
 		currentState = chipState;		
 	}
 	
@@ -47,15 +47,15 @@ public class ChipState {
 		}
 	}
 
-	public IChipState getFlyingState() {
+	public IMovementState getFlyingState() {
 		return currentState;
 	}
 
-	public IChipState getRunningState() {
+	public IMovementState getRunningState() {
 		return runningState;
 	}
 
-	public IChipState getSlidingState() {
+	public IMovementState getSlidingState() {
 		return slidingState;
 	}
 }

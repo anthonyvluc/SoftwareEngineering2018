@@ -60,6 +60,9 @@ public class ChipsChallengeUI extends Application implements Observer {
 		// Create Chip and add to view.
 		chip = new Chip(new Point(12, 12), levelMap, cellSize);
 		root.getChildren().add(chip.getImageView());
+
+		// Add UI as observer to Chip.
+		chip.addObserver(this);
 		
 		// Setup.
 		gameScene = new Scene(root, levelSize*cellSize, levelSize*cellSize);
@@ -68,7 +71,6 @@ public class ChipsChallengeUI extends Application implements Observer {
 		gameStage.show();
 	}
 
-	
 	protected void startChipsChallenge() {
 		// Handle user keyboard inputs.
 		gameScene.setOnKeyPressed(new EventHandler<KeyEvent>(){
@@ -94,11 +96,12 @@ public class ChipsChallengeUI extends Application implements Observer {
 		});
 	}
 
-	
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-
+		if (o instanceof Chip){
+			Chip chip = (Chip)o;
+			chip.updateImageView(); // Update image view of chip
+		}
 	}
 	
 	public static void main(String[] args) {
