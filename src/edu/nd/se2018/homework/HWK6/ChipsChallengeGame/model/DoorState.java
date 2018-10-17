@@ -9,19 +9,26 @@ public class DoorState {
 	IDoorState	closedState;
 	IDoorState	currentState;
 	
-	public DoorState(Point coordinates) {
+	LevelMap 	levelMap;
+	
+	public DoorState(Point coordinates, LevelMap levelMap) {
+		this.levelMap = levelMap;
 		initializeStates();
 		setCoordinates(coordinates);
 	}
 	
 	private void initializeStates(){
-		openState    = new Open(this);
+		openState    = new Openable(this);
 		closedState  = new Closed(this);
 		currentState = closedState;
 	}
 	
 	public void setCoordinates(Point point){
 		doorCoordinates = point;
+	}
+	
+	public IDoorState getDoorState(){
+		return currentState;		
 	}
 	
 	public void setDoorState(IDoorState doorState){

@@ -5,17 +5,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Observer;
 
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Door;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Key;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.LevelBuilder;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Portal;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.view.ChipsChallengeUI;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 public abstract class LevelMap {
 
@@ -30,19 +33,23 @@ public abstract class LevelMap {
 	public Tile[][] levelGrid;
 	private List<Door> doors;
 	private List<Key> keys;
+	public Collection<Point> keysSet;
 	public Collection<Point> waters;
 
 	ObservableList<Node> root;
+	ChipsChallengeUI challengeUI;
 
 	
-	public LevelMap(int dimension, int scale, ObservableList<Node> root) {
+	public LevelMap(int dimension, int scale, ObservableList<Node> root, ChipsChallengeUI chipsChallengeUI) {
 		this.dimension = dimension;
 		this.root = root;
 		this.scale = scale;
+		this.challengeUI = chipsChallengeUI;
 
 		this.levelGrid = new Tile[dimension][dimension];
 		doors = new ArrayList<Door>();
 		keys = new ArrayList<Key>();
+		keysSet = new HashSet<Point>();
 		waters = new HashSet<Point>();
 		
 		loadInitialMap(); // Load initial as all floors.
@@ -133,6 +140,8 @@ public abstract class LevelMap {
 		doors.add(d);
 		Point c = d.getCoordinates();
 		levelGrid[c.x][c.y] = Tile.DOOR;
+		chip.addObserver(d);
+		d.addObserver(challengeUI);
 	}
 	
 	private Door getDoor(int x, int y) {
@@ -149,10 +158,11 @@ public abstract class LevelMap {
 	protected void addKey(Key k) {
 		keys.add(k);
 		Point c = k.getCoordinates();
+		keysSet.add(c);
 		levelGrid[c.x][c.y] = Tile.KEY;
 	}
 	
-	private Key getKey(int x, int y) {
+	public Key getKey(int x, int y) {
 		Key key = null;
 		for (Key k: keys) {
 			Point coordinates = k.getCoordinates();
@@ -163,5 +173,19 @@ public abstract class LevelMap {
 		return key;
 	}
 
+	public void removeDoor(Door d, ObservableList<Node> root) {
+		Point c = d.getCoordinates();
+		int index = c.x*dimension + c.y;
+
+		System.out.println(index);
+		
+		Node n = root.get(index);
+		
+		Image doorImage = d.getImage();
+		((Rectangle) n).setFill(new ImagePattern(doorImage));
+		
+	}
+
+	/* Abstract methods. --------------------- */
 	public abstract void generateLevel();
 }

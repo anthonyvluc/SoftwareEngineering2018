@@ -1,6 +1,10 @@
 package edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model;
 
 import java.awt.Point;
+import java.util.Collection;
+import java.util.HashSet;
+
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Key;
 
 public class ChipState {
 
@@ -9,11 +13,14 @@ public class ChipState {
 	IMovementState slidingState;
 	IMovementState currentState;
 	private LevelMap levelMap;
+	private Collection<Key> inventory;
 
 	public ChipState(Point coordinates, LevelMap levelMap) {
 		this.levelMap = levelMap;
 		initializeStates();
 		setCoordinates(coordinates);
+		
+		this.inventory = new HashSet<Key>();
 	}
 
 	private void initializeStates(){
@@ -28,6 +35,14 @@ public class ChipState {
 	
 	public void setCoordinates(Point point){
 		chipCoordinates = point;
+	}
+	
+	public void addItem(Key key) {
+		inventory.add(key);
+	}
+	
+	public Collection<Key> getInventory(){
+		return inventory;
 	}
 
 	public void setChipState(IMovementState chipState){
@@ -55,4 +70,5 @@ public class ChipState {
 	public IMovementState getSlidingState() {
 		return slidingState;
 	}
+
 }

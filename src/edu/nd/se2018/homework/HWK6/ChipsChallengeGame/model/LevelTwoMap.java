@@ -4,13 +4,14 @@ import java.awt.Point;
 
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Portal;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.view.ChipsChallengeUI;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 
 public class LevelTwoMap extends LevelMap {
 
-	public LevelTwoMap(int dimension, int scale, ObservableList<Node> root) {
-		super(dimension, scale, root);
+	public LevelTwoMap(int dimension, int scale, ObservableList<Node> root, ChipsChallengeUI chipsChallengeUI) {
+		super(dimension, scale, root, chipsChallengeUI);
 	}
 
 	@Override

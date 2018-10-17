@@ -5,14 +5,18 @@ import java.util.Observable;
 import java.util.Observer;
 
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Door;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Key;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model.LevelMap;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model.LevelOneMap;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model.LevelTwoMap;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
 public class ChipsChallengeUI extends Application implements Observer {
@@ -56,9 +60,9 @@ public class ChipsChallengeUI extends Application implements Observer {
 		root = new AnchorPane();
 
 		// Generate the first level.
-		levelMap = new LevelOneMap(levelSize, cellSize, root.getChildren());
+		levelMap = new LevelOneMap(levelSize, cellSize, root.getChildren(), this);
 		levelMap.generateLevel();
-//		levelMap = new LevelTwoMap(levelSize, cellSize, root.getChildren());
+//		levelMap = new LevelTwoMap(levelSize, cellSize, root.getChildren(), this);
 		levelMap.drawLevel(root.getChildren());
 		
 		// Create Chip and add to view.
@@ -102,7 +106,7 @@ public class ChipsChallengeUI extends Application implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if (o instanceof Chip){
+		if (o instanceof Chip) {
 			Chip chip = (Chip)o;
 			chip.updateImageView(); // Update image view of chip
 			
@@ -111,9 +115,24 @@ public class ChipsChallengeUI extends Application implements Observer {
 				System.out.println("complete!!!");
 			}
 			
+			// Chip went into water.
 			if (levelMap.waters.contains(chip.getCoordinates())) {
 				System.out.println("splash!!!");
 			}
+			
+			// Chip picked up key.
+			if (levelMap.keysSet.contains(chip.getCoordinates())) {
+				System.out.println("picked up keys!!!");
+				Point c = chip.getCoordinates();
+				Key key = levelMap.getKey(c.x, c.y);
+				chip.addItem(key);
+			}
+		}
+		
+		if (o instanceof Door) {
+			// Door state changed, reload map.
+			Door door = (Door)o;
+			levelMap.removeDoor(door, root.getChildren());
 		}
 	}
 	

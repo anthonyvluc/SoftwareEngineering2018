@@ -1,10 +1,10 @@
 package edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model;
 
-public class Open implements IDoorState {
+public class Openable implements IDoorState {
 
 	DoorState doorState;
 	
-	public Open(DoorState doorState) {
+	public Openable(DoorState doorState) {
 		this.doorState = doorState;
 	}
 

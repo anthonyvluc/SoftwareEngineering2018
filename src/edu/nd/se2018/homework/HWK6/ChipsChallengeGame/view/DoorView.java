@@ -17,5 +17,9 @@ public class DoorView {
 	public Image getImage() {
 		return doorImage;
 	}
+	
+	public void setImage(Image i) {
+		doorImage = i;
+	}
 
 }

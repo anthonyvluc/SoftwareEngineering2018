@@ -1,6 +1,7 @@
 package edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller;
 
 import java.awt.Point;
+import java.util.Collection;
 import java.util.Observable;
 
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model.ChipState;
@@ -38,6 +39,25 @@ public class Chip extends Observable {
 		return chipState.getCoordinates();
 	}
 	
+	public void addItem(Key key) {
+		chipState.addItem(key);
+	}
+	
+	private Collection<Key> getInventory() {
+		return chipState.getInventory();
+	}
+	
+	public boolean hasRedKey() {
+		boolean bool = false;
+		for (Key k: getInventory()) {
+			if (k instanceof RedKey) {
+				bool = true;
+			}
+		}
+		return bool;
+	}
+	
+	/* Movement methods. ------------------- */
 	public void move(Direction direction) {
 		currentDirection = direction;
 

@@ -10,6 +10,7 @@ import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Key;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Portal;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.RedDoor;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.RedKey;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.view.ChipsChallengeUI;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 
@@ -17,8 +18,8 @@ public class LevelOneMap extends LevelMap {
 	
 	// Portal portal
 	
-	public LevelOneMap(int dimension, int scale, ObservableList<Node> root) {
-		super(dimension, scale, root);
+	public LevelOneMap(int dimension, int scale, ObservableList<Node> root, ChipsChallengeUI chipsChallengeUI) {
+		super(dimension, scale, root, chipsChallengeUI);
 	}
 
 	@Override
@@ -54,13 +55,18 @@ public class LevelOneMap extends LevelMap {
 		levelBuilder.addWater(new Point(21, 9), new Point(21, 1));
 		levelBuilder.addWater(new Point(22, 9), new Point(22, 1));
 		
-		/* Entrance to next room. -------- */
+		/* Next room. -------------------- */
 		levelBuilder.addWall(new Point(20, 12), new Point(24, 12)); // entrance
+		levelBuilder.addWall(new Point(24, 15), new Point(8, 17)); // first wall
+		levelBuilder.addWall(new Point(8, 15), new Point(24, 17)); // first wall
+		levelBuilder.addWater(new Point(7, 20), new Point(21, 22)); // water
+		levelBuilder.addWater(new Point(7, 21), new Point(21, 23)); // water
+		
 		
 		/* Doors. ------------------------ */
-		Door blueDoor = new BlueDoor(new Point(6, 22), scale);
+		Door blueDoor = new BlueDoor(new Point(6, 22), this, scale);
 		addDoor(blueDoor);		
-		Door redDoor = new RedDoor(new Point(19, 12), scale);
+		Door redDoor = new RedDoor(new Point(19, 12), this, scale);
 		addDoor(redDoor);
 		
 		/* Keys. ------------------------ */
