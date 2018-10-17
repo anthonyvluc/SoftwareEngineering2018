@@ -4,32 +4,31 @@ import java.awt.Point;
 import java.util.Observable;
 
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.LevelMap.Tile;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model.ChipState;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.view.ChipView;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.view.Direction;
 import javafx.scene.image.ImageView;
 
 public class Chip extends Observable {
-	
-	private Point coordinates;
-	private LevelMap levelMap;
 
-	ChipView chipView;
+	ChipState 	chipState;
+	ChipView 	chipView;
 	
 	public Chip(Point coordinates, LevelMap levelMap, int scale) {
-		this.coordinates = coordinates;
-		this.levelMap = levelMap;
-
+		
+		// Set state.
+		this.chipState = new ChipState(coordinates, levelMap);
+		
 		// Set initial image.
 		this.chipView = new ChipView(this, scale, Direction.SOUTH);
 	}
 
-	
-	public Point getCoordinates() {
-		return this.coordinates;
-	}
-
 	public ImageView getImageView() {
 		return this.chipView.getImageView();
+	}
+	
+	public Point getCoordinates() {
+		return chipState.getCoordinates();
 	}
 	
 	public void move(Direction direction) {
@@ -52,49 +51,25 @@ public class Chip extends Observable {
 	}
 	
 	private void goNorth() {
-		Point prevPosition = getCoordinates();
-		Point newPosition = new Point(this.coordinates.x, this.coordinates.y - 1);
-		if (levelMap.isValidChipPosition(newPosition)) {
-			levelMap.levelGrid[prevPosition.x][prevPosition.y] = Tile.FLOOR;
-			levelMap.levelGrid[newPosition.x][newPosition.y] = Tile.CHIP;
-			coordinates.setLocation(newPosition);
-		}
+		chipState.setPosition(0, -1);
 		this.chipView.setChipImageView(Direction.NORTH); // Update image.
 	}
 
 
 	private void goSouth() {
-		Point prevPosition = getCoordinates();
-		Point newPosition = new Point(this.coordinates.x, this.coordinates.y + 1);
-		if (levelMap.isValidChipPosition(newPosition)) {
-			levelMap.levelGrid[prevPosition.x][prevPosition.y] = Tile.FLOOR;
-			levelMap.levelGrid[newPosition.x][newPosition.y] = Tile.CHIP;
-			coordinates.setLocation(newPosition);
-		}
+		chipState.setPosition(0, 1);
 		this.chipView.setChipImageView(Direction.SOUTH); // Update image.
 	}
 
 
 	private void goEast() {
-		Point prevPosition = getCoordinates();
-		Point newPosition = new Point(this.coordinates.x + 1, this.coordinates.y);
-		if (levelMap.isValidChipPosition(newPosition)) {
-			levelMap.levelGrid[prevPosition.x][prevPosition.y] = Tile.FLOOR;
-			levelMap.levelGrid[newPosition.x][newPosition.y] = Tile.CHIP;
-			coordinates.setLocation(newPosition);
-		}
+		chipState.setPosition(1, 0);
 		this.chipView.setChipImageView(Direction.EAST); // Update image.
 	}
 
 
 	private void goWest() {
-		Point prevPosition = getCoordinates();
-		Point newPosition = new Point(this.coordinates.x - 1, this.coordinates.y);
-		if (levelMap.isValidChipPosition(newPosition)) {
-			levelMap.levelGrid[prevPosition.x][prevPosition.y] = Tile.FLOOR;
-			levelMap.levelGrid[newPosition.x][newPosition.y] = Tile.CHIP;
-			coordinates.setLocation(newPosition);
-		}
+		chipState.setPosition(-1, 0);
 		this.chipView.setChipImageView(Direction.WEST); // Update image.
 	}
 }
