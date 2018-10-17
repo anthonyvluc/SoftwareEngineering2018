@@ -57,11 +57,12 @@ public class ChipsChallengeUI extends Application implements Observer {
 
 		// Generate the first level.
 		levelMap = new LevelOneMap(levelSize, cellSize, root.getChildren());
+		levelMap.generateLevel();
 //		levelMap = new LevelTwoMap(levelSize, cellSize, root.getChildren());
 		levelMap.drawLevel(root.getChildren());
 		
 		// Create Chip and add to view.
-		chip = new Chip(new Point(12, 12), levelMap, cellSize);
+		chip = levelMap.getChip();
 		root.getChildren().add(chip.getImageView());
 
 		// Add UI as observer to Chip.

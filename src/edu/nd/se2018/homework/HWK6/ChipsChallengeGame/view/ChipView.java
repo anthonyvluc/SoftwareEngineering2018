@@ -25,14 +25,14 @@ public class ChipView {
 		this.currentImageView = new ImageView();
 		
 		// Set initial direction.
-		setChipImageView(direction);
+		setImageView(direction);
 	}
 
 	public ImageView getImageView() {
 		return currentImageView;
 	}
 	
-	public void setChipImageView(Direction direction) {
+	public void setImageView(Direction direction) {
 		switch(direction) {
 		case NORTH:
 			currentImageView.setImage(chipUpImage);

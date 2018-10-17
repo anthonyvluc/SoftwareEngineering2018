@@ -31,7 +31,7 @@ public class Chip extends Observable {
 	}
 	
 	public void updateImageView() {
-		chipView.setChipImageView(currentDirection);
+		chipView.setImageView(currentDirection);
 	}
 	
 	public Point getCoordinates() {

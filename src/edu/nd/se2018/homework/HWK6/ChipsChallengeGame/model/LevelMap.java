@@ -2,6 +2,8 @@ package edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model;
 
 import java.awt.Point;
 
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Portal;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -10,10 +12,11 @@ import javafx.scene.shape.Rectangle;
 
 public abstract class LevelMap {
 
+	Chip 	chip;
+	Portal 	portal;
+	
 	final int dimension;
 	final int scale;
-	
-	protected Point portalCoordinates;
 
 	public Tile[][] levelGrid;
 
@@ -26,6 +29,8 @@ public abstract class LevelMap {
 		this.levelGrid = new Tile[dimension][dimension];
 		
 		this.root = root;
+		
+		loadInitialMap(); // Load initial as all floors.
 	}
 
 	public void drawLevel(ObservableList<Node> root) {
@@ -39,6 +44,11 @@ public abstract class LevelMap {
 					case FLOOR:
 						Image tileImage = new Image("images/chip/textures/BlankTile.png", scale, scale, true, true);
 						rect.setFill(new ImagePattern(tileImage));
+						root.add(rect);
+						break;
+					case PORTAL:
+						Image portalImage = portal.getImage();
+						rect.setFill(new ImagePattern(portalImage));
 						root.add(rect);
 						break;
 					default:
@@ -67,17 +77,19 @@ public abstract class LevelMap {
 			t = Tile.WALL;
 		}
 		
-		if (t != Tile.FLOOR) {
+		if (t != Tile.PORTAL && t != Tile.FLOOR) {
 			bool = false;
 		}
 		return bool;
 	}
 	
+	public Chip getChip() {
+		return chip;
+	}
+	
 	public Point getPortalCoordinates() {
-		return portalCoordinates;
+		return portal.getCoordinates();
 	}
 
-	protected void setPortalCoordinates(Point point) {
-		this.portalCoordinates = point;
-	}	
+	public abstract void generateLevel();
 }
