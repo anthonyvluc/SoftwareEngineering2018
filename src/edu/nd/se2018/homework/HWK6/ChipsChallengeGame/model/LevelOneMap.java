@@ -3,10 +3,13 @@ package edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model;
 import java.awt.Point;
 
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.BlueDoor;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.BlueKey;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Door;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Key;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Portal;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.RedDoor;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.RedKey;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 
@@ -54,12 +57,17 @@ public class LevelOneMap extends LevelMap {
 		/* Entrance to next room. -------- */
 		levelBuilder.addWall(new Point(20, 12), new Point(24, 12)); // entrance
 		
-		
 		/* Doors. ------------------------ */
-		Door blueDoor = new BlueDoor(new Point(6, 22), this, scale);
+		Door blueDoor = new BlueDoor(new Point(6, 22), scale);
 		addDoor(blueDoor);		
-		Door redDoor = new RedDoor(new Point(19, 12), this, scale);
+		Door redDoor = new RedDoor(new Point(19, 12), scale);
 		addDoor(redDoor);
+		
+		/* Keys. ------------------------ */
+		Key blueKey = new BlueKey(new Point(22, 23), scale);
+		addKey(blueKey);		
+		Key redKey = new RedKey(new Point(17, 10), scale);
+		addKey(redKey);
 		
 	}
 }

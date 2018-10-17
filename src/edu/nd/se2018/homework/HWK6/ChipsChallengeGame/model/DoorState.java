@@ -9,10 +9,7 @@ public class DoorState {
 	IDoorState	closedState;
 	IDoorState	currentState;
 	
-	private LevelMap levelMap;
-	
-	public DoorState(Point coordinates, LevelMap levelMap) {
-		this.levelMap = levelMap;
+	public DoorState(Point coordinates) {
 		initializeStates();
 		setCoordinates(coordinates);
 	}
@@ -25,7 +22,6 @@ public class DoorState {
 	
 	public void setCoordinates(Point point){
 		doorCoordinates = point;
-		levelMap.levelGrid[point.x][point.y] = Tile.DOOR;
 	}
 	
 	public void setDoorState(IDoorState doorState){

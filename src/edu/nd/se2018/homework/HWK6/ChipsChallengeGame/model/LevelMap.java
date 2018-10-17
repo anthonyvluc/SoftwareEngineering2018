@@ -8,6 +8,7 @@ import java.util.List;
 
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Door;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Key;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.LevelBuilder;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Portal;
 import javafx.collections.ObservableList;
@@ -28,6 +29,7 @@ public abstract class LevelMap {
 
 	public Tile[][] levelGrid;
 	private List<Door> doors;
+	private List<Key> keys;
 	public Collection<Point> waters;
 
 	ObservableList<Node> root;
@@ -40,6 +42,7 @@ public abstract class LevelMap {
 
 		this.levelGrid = new Tile[dimension][dimension];
 		doors = new ArrayList<Door>();
+		keys = new ArrayList<Key>();
 		waters = new HashSet<Point>();
 		
 		loadInitialMap(); // Load initial as all floors.
@@ -58,6 +61,12 @@ public abstract class LevelMap {
 						Door door = getDoor(i, j);
 						Image doorImage = door.getImage();
 						rect.setFill(new ImagePattern(doorImage));
+						root.add(rect);
+						break;
+					case KEY:
+						Key key = getKey(i, j);
+						Image keyImage = key.getImage();
+						rect.setFill(new ImagePattern(keyImage));
 						root.add(rect);
 						break;
 					case FLOOR:
@@ -135,6 +144,23 @@ public abstract class LevelMap {
 			}
 		}
 		return door;
+	}
+	
+	protected void addKey(Key k) {
+		keys.add(k);
+		Point c = k.getCoordinates();
+		levelGrid[c.x][c.y] = Tile.KEY;
+	}
+	
+	private Key getKey(int x, int y) {
+		Key key = null;
+		for (Key k: keys) {
+			Point coordinates = k.getCoordinates();
+			if (coordinates.x == x && coordinates.y == y) {
+				key = k;
+			}
+		}
+		return key;
 	}
 
 	public abstract void generateLevel();
