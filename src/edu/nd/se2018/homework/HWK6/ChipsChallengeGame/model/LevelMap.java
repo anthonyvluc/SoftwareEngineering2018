@@ -3,6 +3,7 @@ package edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model;
 import java.awt.Point;
 
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.LevelBuilder;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Portal;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -14,6 +15,8 @@ public abstract class LevelMap {
 
 	Chip 	chip;
 	Portal 	portal;
+
+	LevelBuilder levelBuilder;
 	
 	final int dimension;
 	final int scale;
@@ -31,6 +34,8 @@ public abstract class LevelMap {
 		this.root = root;
 		
 		loadInitialMap(); // Load initial as all floors.
+		
+		levelBuilder = new LevelBuilder(this);
 	}
 
 	public void drawLevel(ObservableList<Node> root) {
@@ -49,6 +54,11 @@ public abstract class LevelMap {
 					case PORTAL:
 						Image portalImage = portal.getImage();
 						rect.setFill(new ImagePattern(portalImage));
+						root.add(rect);
+						break;
+					case WALL:
+						Image wallImage = new Image("images/chip/textures/grayWall.png", scale, scale, true, true);
+						rect.setFill(new ImagePattern(wallImage));
 						root.add(rect);
 						break;
 					default:

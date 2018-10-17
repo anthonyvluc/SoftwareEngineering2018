@@ -22,6 +22,10 @@ public class LevelOneMap extends LevelMap {
 
 		// Set portal location.
 		this.portal = new Portal(new Point(0, 0), this, scale);
+	
+		// Add walls on left-hand side.
+		this.levelBuilder.addWall(new Point(6, 0), new Point(6, 20));
+		
 		
 	}
 }
