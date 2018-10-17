@@ -22,7 +22,6 @@ public class LevelMap {
 	ObservableList<Node> root;
 	
 	public LevelMap(int dimension, int scale, ObservableList<Node> root) {
-		// TODO Auto-generated constructor stub
 		this.dimension = dimension;
 		this.scale = scale;
 		this.levelGrid = new Tile[dimension][dimension];
@@ -61,12 +60,12 @@ public class LevelMap {
 		}
 	}
 	
-	public boolean isValidChipPosition(Point newPosition) {
+	public boolean isValidChipPosition(Point position) {
 		boolean bool = true;
-		if (levelGrid[newPosition.x][newPosition.y] != Tile.FLOOR) {
+		if (levelGrid[position.x][position.y] != Tile.FLOOR) {
 			bool = false;
 		}
-		return bool; // TODO: update this
+		return bool;
 	}
 	
 }

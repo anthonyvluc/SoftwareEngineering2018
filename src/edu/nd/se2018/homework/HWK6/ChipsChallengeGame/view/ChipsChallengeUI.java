@@ -6,7 +6,6 @@ import java.util.Observer;
 
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.LevelMap;
-import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip.Direction;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
