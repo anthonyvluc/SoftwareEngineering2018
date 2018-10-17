@@ -1,8 +1,11 @@
 package edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Door;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.LevelBuilder;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Portal;
 import javafx.collections.ObservableList;
@@ -22,19 +25,20 @@ public abstract class LevelMap {
 	final int scale;
 
 	public Tile[][] levelGrid;
+	private List<Door> doors;
 
 	ObservableList<Node> root;
 
 	
 	public LevelMap(int dimension, int scale, ObservableList<Node> root) {
 		this.dimension = dimension;
-		this.scale = scale;
-		this.levelGrid = new Tile[dimension][dimension];
-		
 		this.root = root;
+		this.scale = scale;
+
+		this.levelGrid = new Tile[dimension][dimension];
+		doors = new ArrayList<Door>();
 		
 		loadInitialMap(); // Load initial as all floors.
-		
 		levelBuilder = new LevelBuilder(this);
 	}
 
@@ -45,6 +49,12 @@ public abstract class LevelMap {
 				switch(levelGrid[i][j]) {
 					case CHIP:
 //						root.add();
+						break;
+					case DOOR:
+						Door door = getDoor(i, j);
+						Image doorImage = door.getImage();
+						rect.setFill(new ImagePattern(doorImage));
+						root.add(rect);
 						break;
 					case FLOOR:
 						Image tileImage = new Image("images/chip/textures/BlankTile.png", scale, scale, true, true);
@@ -99,6 +109,23 @@ public abstract class LevelMap {
 	
 	public Point getPortalCoordinates() {
 		return portal.getCoordinates();
+	}
+	
+	protected void addDoor(Door d) {
+		doors.add(d);
+		Point c = d.getCoordinates();
+		levelGrid[c.x][c.y] = Tile.DOOR;
+	}
+	
+	private Door getDoor(int x, int y) {
+		Door door = null;
+		for (Door d: doors) {
+			Point coordinates = d.getCoordinates();
+			if (coordinates.x == x && coordinates.y == y) {
+				door = d;
+			}
+		}
+		return door;
 	}
 
 	public abstract void generateLevel();

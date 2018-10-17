@@ -2,7 +2,9 @@ package edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model;
 
 import java.awt.Point;
 
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.BlueDoor;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Door;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Portal;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -21,11 +23,13 @@ public class LevelOneMap extends LevelMap {
 		chip = new Chip(new Point(12, 12), this, scale);
 
 		// Set portal location.
-		this.portal = new Portal(new Point(0, 0), this, scale);
+		portal = new Portal(new Point(0, 0), this, scale);
 	
 		// Add walls on left-hand side.
-		this.levelBuilder.addWall(new Point(6, 0), new Point(6, 20));
+		levelBuilder.addWall(new Point(6, 0), new Point(6, 20));
 		
+		Door blueDoor = new BlueDoor(new Point(6, 23), this, scale);
+		addDoor(blueDoor);
 		
 	}
 }
