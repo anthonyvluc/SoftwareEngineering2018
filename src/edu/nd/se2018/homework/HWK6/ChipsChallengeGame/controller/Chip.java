@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.Observable;
 
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model.ChipState;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model.LevelMap;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.view.ChipView;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.view.Direction;
 import javafx.scene.image.ImageView;

@@ -1,4 +1,4 @@
-package edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller;
+package edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model;
 
 import java.awt.Point;
 
