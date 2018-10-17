@@ -39,17 +39,26 @@ public class LevelOneMap extends LevelMap {
 		
 		/* Center. ----------------------- */
 		// Walls around Chip 
-		levelBuilder.addWall(new Point(7, 12), new Point(14, 12)); // bottom
+		levelBuilder.addWall(new Point(7, 12), new Point(18, 12)); // bottom
 		levelBuilder.addWall(new Point(15, 12), new Point(15, 8)); // right
 		levelBuilder.addWall(new Point(9, 8), new Point(14, 8)); // top
 		
+		/* Cross. ------------------------ */
+		levelBuilder.addWall(new Point(11, 1), new Point(11, 6)); // Vertical
+		levelBuilder.addWater(new Point(9, 3), new Point(24, 3)); // Horizontal
+		levelBuilder.addWater(new Point(9, 4), new Point(24, 4)); // Horizontal
+		// Right water
+		levelBuilder.addWater(new Point(21, 9), new Point(21, 1));
+		levelBuilder.addWater(new Point(22, 9), new Point(22, 1));
 		
+		/* Entrance to next room. -------- */
+		levelBuilder.addWall(new Point(20, 12), new Point(24, 12)); // entrance
 		
 		
 		/* Doors. ------------------------ */
 		Door blueDoor = new BlueDoor(new Point(6, 22), this, scale);
 		addDoor(blueDoor);		
-		Door redDoor = new RedDoor(new Point(15, 15), this, scale);
+		Door redDoor = new RedDoor(new Point(19, 12), this, scale);
 		addDoor(redDoor);
 		
 	}
