@@ -9,13 +9,11 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 public class LevelMap {
-
-	public enum Tile {
-	    CHIP, FLOOR, WALL, DOOR
-	}
 	
 	final int dimension;
 	final int scale;
+	
+	private Point portalCoordinates;
 	
 	public Tile[][] levelGrid;
 
@@ -28,9 +26,10 @@ public class LevelMap {
 		
 		this.root = root;
 		
+		portalCoordinates = new Point(0, 0);
+		
 		loadInitialMap();
 	}
-
 	
 	private void loadInitialMap() {
 		for (int i = 0; i < dimension; ++i) {
@@ -66,6 +65,10 @@ public class LevelMap {
 			bool = false;
 		}
 		return bool;
+	}
+	
+	public Point getPortalCoordinates() {
+		return portalCoordinates;
 	}
 	
 }

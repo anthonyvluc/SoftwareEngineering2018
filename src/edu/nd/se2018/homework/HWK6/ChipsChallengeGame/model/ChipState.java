@@ -2,8 +2,6 @@ package edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model;
 
 import java.awt.Point;
 
-import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model.LevelMap.Tile;
-
 public class ChipState {
 
 	Point chipCoordinates;
