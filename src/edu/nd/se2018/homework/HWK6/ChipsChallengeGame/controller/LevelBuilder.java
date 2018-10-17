@@ -21,7 +21,13 @@ public class LevelBuilder {
 		for (Point p: squares) {
 			levelMap.levelGrid[p.x][p.y] = Tile.WALL;
 		}
-		
 	}
-	
+
+	public void addWater(Point p1, Point p2) {
+		List<Point> squares = Bresenham.findLine(levelMap.levelGrid, p1.x, p1.y, p2.x, p2.y);
+		
+		for (Point p: squares) {
+			levelMap.levelGrid[p.x][p.y] = Tile.WATER;
+		}
+	}
 }

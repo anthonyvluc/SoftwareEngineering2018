@@ -71,6 +71,11 @@ public abstract class LevelMap {
 						rect.setFill(new ImagePattern(wallImage));
 						root.add(rect);
 						break;
+					case WATER:
+						Image waterImage = new Image("images/chip/textures/water.png", scale, scale, true, true);
+						rect.setFill(new ImagePattern(waterImage));
+						root.add(rect);
+						break;
 					default:
 						break;
 				}
@@ -97,7 +102,7 @@ public abstract class LevelMap {
 			t = Tile.WALL;
 		}
 		
-		if (t != Tile.PORTAL && t != Tile.FLOOR) {
+		if (t != Tile.PORTAL && (t == Tile.WALL || t == Tile.DOOR)) {
 			bool = false;
 		}
 		return bool;

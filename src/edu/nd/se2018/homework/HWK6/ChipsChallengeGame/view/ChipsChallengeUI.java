@@ -96,11 +96,6 @@ public class ChipsChallengeUI extends Application implements Observer {
 					default:
 						break;				
 				}
-				
-				// Check if Chip is at portal.
-				if (chip.getCoordinates().equals(levelMap.getPortalCoordinates())) {
-					System.out.println("complete!!!");
-				}
 			}		
 		});
 	}
@@ -110,6 +105,11 @@ public class ChipsChallengeUI extends Application implements Observer {
 		if (o instanceof Chip){
 			Chip chip = (Chip)o;
 			chip.updateImageView(); // Update image view of chip
+			
+			// Check if Chip is at portal.
+			if (chip.getCoordinates().equals(levelMap.getPortalCoordinates())) {
+				System.out.println("complete!!!");
+			}
 		}
 	}
 	
