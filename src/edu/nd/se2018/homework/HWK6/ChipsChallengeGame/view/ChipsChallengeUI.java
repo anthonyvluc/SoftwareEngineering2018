@@ -1,6 +1,7 @@
 package edu.nd.se2018.homework.HWK6.ChipsChallengeGame.view;
 
 import java.awt.Point;
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -13,15 +14,12 @@ import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model.LevelTwoMap;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
 public class ChipsChallengeUI extends Application implements Observer {
 
-	/* TODO: Move to explorer class */
 	final int cellSize = 30;
 	final int levelSize = 25;
 	final int numChips = 3;
@@ -32,18 +30,25 @@ public class ChipsChallengeUI extends Application implements Observer {
 	
 	Chip chip;
 	LevelMap levelMap;	
-
+	LevelMap[] levels;
+	int currentLevel;
+	final int numLevels = 2;
 	
-	public ChipsChallengeUI() {
-		// TODO Auto-generated constructor stub
-	}
+	
+	public ChipsChallengeUI() {}
 
 	@Override
 	public void start(Stage gameStage) throws Exception {
-		
+
 		// Set stage.
 		this.gameStage = gameStage;
-		
+
+		// Initialize pane of application.
+		root = new AnchorPane();
+
+		// Initialize levels.
+		initializeLevels();
+
 		// Initialize game.
 		initializeGame();
 
@@ -55,14 +60,12 @@ public class ChipsChallengeUI extends Application implements Observer {
 	}
 
 	public void initializeGame() {
-		
-		// Initialize pane of application.
-		root = new AnchorPane();
 
-		// Generate the first level.
-		levelMap = new LevelOneMap(levelSize, cellSize, root.getChildren(), this);
+		// Set current level.
+		levelMap = levels[currentLevel];
+		
+		// Generate level.
 		levelMap.generateLevel();
-//		levelMap = new LevelTwoMap(levelSize, cellSize, root.getChildren(), this);
 		levelMap.drawLevel(root.getChildren());
 		
 		// Create Chip and add to view.
@@ -77,6 +80,21 @@ public class ChipsChallengeUI extends Application implements Observer {
 		gameStage.setTitle("Chips Challenge by Hai");
 		gameStage.setScene(gameScene);
 		gameStage.show();
+	}
+	
+	public void initializeLevels() {
+		levels = new LevelMap[numLevels];
+		
+		// Initialize level one.
+		LevelMap level1Map = new LevelOneMap(levelSize, cellSize, root.getChildren(), this);
+		levels[0] = level1Map;
+		
+		// Initialize level two.
+		LevelMap level2Map = new LevelTwoMap(levelSize, cellSize, root.getChildren(), this);
+		levels[1] = level2Map;
+		
+		// Set first level.
+		currentLevel = 0;
 	}
 
 	protected void startChipsChallenge() {
@@ -112,12 +130,28 @@ public class ChipsChallengeUI extends Application implements Observer {
 			
 			// Check if Chip is at portal.
 			if (chip.getCoordinates().equals(levelMap.getPortalCoordinates())) {
-				System.out.println("complete!!!");
+				currentLevel = currentLevel + 1;
+				if (currentLevel >= numLevels) {
+					// Finished last level.
+					System.out.println("Finished game!");
+				} else {
+					// Load next level.
+					levelMap = levels[currentLevel];
+					initializeGame();
+					startChipsChallenge();					
+				}
 			}
 			
 			// Chip went into water.
 			if (levelMap.waters.contains(chip.getCoordinates())) {
 				System.out.println("splash!!!");
+
+				levelMap.splash(chip.getCoordinates(), root.getChildren());
+				pause(700); // TODO: figure out how to slow it down to show the splash
+				
+				// Reset level.
+				initializeGame();
+				startChipsChallenge(); // TODO: the input of user is still sent after game is reset.
 			}
 			
 			// Chip picked up key.
@@ -125,7 +159,10 @@ public class ChipsChallengeUI extends Application implements Observer {
 				System.out.println("picked up keys!!!");
 				Point c = chip.getCoordinates();
 				Key key = levelMap.getKey(c.x, c.y);
+				
+				// Add to inventory and remove from map.
 				chip.addItem(key);
+				levelMap.removeKey(key, root.getChildren());
 			}
 		}
 		
@@ -133,6 +170,14 @@ public class ChipsChallengeUI extends Application implements Observer {
 			// Door state changed, reload map.
 			Door door = (Door)o;
 			levelMap.removeDoor(door, root.getChildren());
+		}
+	}
+	
+	public void pause(int time) {
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 	

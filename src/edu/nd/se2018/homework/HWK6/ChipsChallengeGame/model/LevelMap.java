@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Observer;
 
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Door;
@@ -18,7 +17,6 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
 public abstract class LevelMap {
 
@@ -176,14 +174,35 @@ public abstract class LevelMap {
 	public void removeDoor(Door d, ObservableList<Node> root) {
 		Point c = d.getCoordinates();
 		int index = c.x*dimension + c.y;
-
-		System.out.println(index);
-		
 		Node n = root.get(index);
 		
-		Image doorImage = d.getImage();
+		Image doorImage = new Image("images/chip/textures/BlankTile.png", scale, scale, true, true);
 		((Rectangle) n).setFill(new ImagePattern(doorImage));
 		
+		levelGrid[c.x][c.y] = Tile.FLOOR;
+		
+		doors.remove(d);
+	}
+	
+	public void removeKey(Key k, ObservableList<Node> root) {
+		Point c = k.getCoordinates();
+		int index = c.x*dimension + c.y;
+		Node n = root.get(index);
+		
+		Image keyImage = new Image("images/chip/textures/BlankTile.png", scale, scale, true, true);
+		((Rectangle) n).setFill(new ImagePattern(keyImage));
+		
+		levelGrid[c.x][c.y] = Tile.FLOOR;
+		
+		keys.remove(k);
+		keysSet.remove(k.getCoordinates());
+	}
+	
+	public void splash(Point p, ObservableList<Node> root) {
+		Rectangle rect = new Rectangle(p.x*scale, p.y*scale, scale, scale);
+		Image splashImage = new Image("images/chip/textures/waterSplash.png", scale, scale, true, true);
+		rect.setFill(new ImagePattern(splashImage));
+		root.add(rect);
 	}
 
 	/* Abstract methods. --------------------- */

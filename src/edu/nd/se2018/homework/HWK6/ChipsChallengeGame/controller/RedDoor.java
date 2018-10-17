@@ -26,8 +26,6 @@ public class RedDoor extends Door {
 			}
 			
 			if (getCoordinates().equals(chip.getCoordinates())) {
-				System.out.println("on door");
-				this.setImage(this.openedDoor);
 				setChanged();
 				notifyObservers();
 			}

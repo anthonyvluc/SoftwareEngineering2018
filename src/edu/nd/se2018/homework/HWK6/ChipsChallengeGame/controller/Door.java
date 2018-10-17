@@ -24,8 +24,6 @@ public abstract class Door extends Observable implements Observer {
 		this.levelMap = levelMap;
 		this.scale = scale;
 		
-		openedDoor = new Image("images/chip/textures/BlankTile.png", scale, scale, true, true);
-		
 		// Set initial state.
 		doorState = new DoorState(coordinates, levelMap);
 	}

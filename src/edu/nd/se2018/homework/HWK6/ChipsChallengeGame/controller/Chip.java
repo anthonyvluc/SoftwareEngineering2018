@@ -47,6 +47,16 @@ public class Chip extends Observable {
 		return chipState.getInventory();
 	}
 	
+	public boolean hasBlueKey() {
+		boolean bool = false;
+		for (Key k: getInventory()) {
+			if (k instanceof BlueKey) {
+				bool = true;
+			}
+		}
+		return bool;
+	}
+	
 	public boolean hasRedKey() {
 		boolean bool = false;
 		for (Key k: getInventory()) {
