@@ -6,8 +6,6 @@ import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.BlueDoor;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.BlueKey;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.ChipItem;
-import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Door;
-import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Item;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Portal;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.RedDoor;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.RedKey;

@@ -16,24 +16,26 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class ChipsChallengeUI extends Application implements Observer {
 
-	final int cellSize = 30;
-	final int levelSize = 25;
-	final int numChips = 3;
+	final int 				cellSize 	= 30;
+	final int 				levelSize 	= 25;
+	final private double	uiPadding 	= 50.0;
+	final int 				numLevels 	= 2;
 
-	AnchorPane root;
-	Stage gameStage;
-	Scene gameScene = null;	
-	
+	AnchorPane 				root;
+	Stage 					gameStage;
+	Scene 					gameScene = null;
+	Text 					levelMessage, numChipMessage, inventoryMessage;
+
 	Chip chip;
 	LevelMap levelMap;	
 	LevelMap[] levels;
 	int currentLevel;
-	final int numLevels = 2;
-	
 	
 	public ChipsChallengeUI() {}
 
@@ -49,23 +51,17 @@ public class ChipsChallengeUI extends Application implements Observer {
 		// Initialize levels.
 		initializeLevels();
 		
-		// Initialize game.
-		initializeGame();
-
-		// TODO: Start UI.
-//		startUI();
-				
-		// Start game.
-		startChipsChallenge();
+		// Start with initial values.
+		restart();
 	}
 
-	public void initializeGame() {		
+	public void initializeGame(int level) {		
 		
 		// Reset nodes.
-		root.getChildren().removeAll(root.getChildren());		
+		root.getChildren().clear();
 
 		// Set current level.
-		levelMap = levels[currentLevel];
+		levelMap = levels[level];
 		
 		// Generate level.
 		levelMap.generateLevel();
@@ -80,7 +76,7 @@ public class ChipsChallengeUI extends Application implements Observer {
 		
 		// Setup.
 		if (gameScene == null) {
-			gameScene = new Scene(root, levelSize*cellSize, levelSize*cellSize);			
+			gameScene = new Scene(root, levelSize*cellSize, levelSize*cellSize + uiPadding);
 		}
 		gameStage.setTitle("Chips Challenge by Hai");
 		gameStage.setScene(gameScene);
@@ -120,8 +116,10 @@ public class ChipsChallengeUI extends Application implements Observer {
 					case DOWN:
 						chip.move(Direction.SOUTH);
 						break;
+					case R:
+						restart();
 					default:
-						break;				
+						break;		
 				}
 			}		
 		});
@@ -139,48 +137,42 @@ public class ChipsChallengeUI extends Application implements Observer {
 				if (currentLevel >= numLevels) {
 					// Finished last level.
 					System.out.println("Finished game!");
+					System.exit(0);
 				} else {
 					// Load next level.
-					System.out.println("Loading next level...");
-					levelMap = levels[currentLevel];
-					initializeGame();
-					startChipsChallenge();											
+					restart();
 				}
 			}
 			
 			// Chip went into water.
 			if (levelMap.waters.contains(chip.getCoordinates())) {
-				System.out.println("splash!!!");
-
 				levelMap.splash(chip.getCoordinates(), root.getChildren());
 				pause(700); // TODO: figure out how to slow it down to show the splash
-				
-				// Reset level.
-				initializeGame();
-				startChipsChallenge(); // TODO: the input of user is still sent after game is reset.
-				
-				// TODO: figure out how to fix the reset not deleting...
+
+				restart();	// Restart level.
 			}
 			
 			// Chip picked up key.
 			if (levelMap.keysSet.contains(chip.getCoordinates())) {
-				System.out.println("picked up keys!!!");
+				// Add to inventory and remove from map.
 				Point c = chip.getCoordinates();
 				Item key = levelMap.getKey(c.x, c.y);
-				
-				// Add to inventory and remove from map.
 				chip.addItem(key);
-				levelMap.removeKey(key, root.getChildren());
+				levelMap.removeKey(key, root.getChildren());				
+
+				// Update text.
+				inventoryMessage.setText("Current Inventory: " + (levelMap.getChip().getInventoryString()));
 			}
 			
 			// Chip picked up chip item.
-			if (levelMap.itemsSet.contains(chip.getCoordinates())) {
-				System.out.println("picked up chip!!!");
+			if (levelMap.itemsSet.contains(chip.getCoordinates())) {				
+				// Update level chip item count and remove from map.
 				Point c = chip.getCoordinates();
 				ChipItem chipItem = levelMap.getChipItem(c.x, c.y);
-				
-				// Update level chip item count and remove from map.
 				levelMap.removeChipItem(chipItem, root.getChildren());
+				
+				// Update text.
+				numChipMessage.setText("Chips remaining: " + (levelMap.getNumChipItems()));
 			}
 		}
 		
@@ -191,6 +183,15 @@ public class ChipsChallengeUI extends Application implements Observer {
 		}
 	}
 	
+	private void restart() {
+		int progressLevel = currentLevel; // To help keep track of current progress before reset.
+		initializeLevels();
+		initializeGame(progressLevel);
+		startChipsChallenge();	
+		startUI();
+		currentLevel = progressLevel;
+	}
+
 	public void pause(int time) {
 		try {
 			Thread.sleep(time);
@@ -198,6 +199,36 @@ public class ChipsChallengeUI extends Application implements Observer {
 			e.printStackTrace();
 		}
 	}
+	
+	public void startUI() {
+		double width = levelSize*cellSize;
+		
+		levelMessage = new Text();
+		levelMessage.setX(10);
+		levelMessage.setY(levelSize*cellSize + 30.0);
+		levelMessage.setFont(new Font("Calibri", 14));
+		
+		numChipMessage = new Text();
+		numChipMessage.setX(width*1/3 - 10);
+		numChipMessage.setY(levelSize*cellSize + 30.0);
+		numChipMessage.setFont(new Font("Calibri", 14));
+		
+		inventoryMessage = new Text();
+		inventoryMessage.setX(width*2/3 - 10);
+		inventoryMessage.setY(levelSize*cellSize + 30.0);
+		inventoryMessage.setFont(new Font("Calibri", 14));
+
+		// Set text
+		levelMessage.setText("Current Level: " + (currentLevel + 1));
+		numChipMessage.setText("Chips remaining: " + (levelMap.getNumChipItems()));
+		inventoryMessage.setText("Current Inventory: " + (levelMap.getChip().getInventoryString()));
+		
+		// Add UI to pane.
+		root.getChildren().add(levelMessage);
+		root.getChildren().add(numChipMessage);
+		root.getChildren().add(inventoryMessage);
+		
+	}	
 	
 	public static void main(String[] args) {
 		launch(args);

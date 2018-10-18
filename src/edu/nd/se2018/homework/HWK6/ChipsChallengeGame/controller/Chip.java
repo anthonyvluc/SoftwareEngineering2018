@@ -3,6 +3,7 @@ package edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller;
 import java.awt.Point;
 import java.util.Collection;
 import java.util.Observable;
+import java.util.StringJoiner;
 
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model.ChipState;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model.LevelMap;
@@ -45,6 +46,20 @@ public class Chip extends Observable {
 	
 	private Collection<Item> getInventory() {
 		return chipState.getInventory();
+	}
+	
+	public String getInventoryString() {
+		// Source : https://stackoverflow.com/questions/63150/whats-the-best-way-to-build-a-string-of-delimited-items-in-java
+		StringJoiner joiner = new StringJoiner(", ");
+		
+		if (hasBlueKey()) {
+			joiner.add("Blue Key");
+		}
+		if (hasRedKey()) {
+			joiner.add("Red Key");
+		}
+
+		return joiner.toString();
 	}
 	
 	public boolean hasBlueKey() {
