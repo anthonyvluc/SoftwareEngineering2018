@@ -62,6 +62,9 @@ public class LevelOneMap extends LevelMap {
 		levelBuilder.addWater(new Point(7, 20), new Point(21, 22)); // water
 		levelBuilder.addWater(new Point(7, 21), new Point(21, 23)); // water
 		
+		/* Chip Items. ------------------- */
+//		ChipItem chipItem = 
+		
 		
 		/* Doors. ------------------------ */
 		Door blueDoor = new BlueDoor(new Point(6, 22), this, scale);

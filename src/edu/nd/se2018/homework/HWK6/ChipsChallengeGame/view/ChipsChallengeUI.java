@@ -152,6 +152,8 @@ public class ChipsChallengeUI extends Application implements Observer {
 				// Reset level.
 				initializeGame();
 				startChipsChallenge(); // TODO: the input of user is still sent after game is reset.
+				
+				// TODO: figure out how to fix the reset not deleting...
 			}
 			
 			// Chip picked up key.
