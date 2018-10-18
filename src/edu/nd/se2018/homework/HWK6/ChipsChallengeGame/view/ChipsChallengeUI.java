@@ -45,10 +45,10 @@ public class ChipsChallengeUI extends Application implements Observer {
 
 		// Initialize pane of application.
 		root = new AnchorPane();
-
+		
 		// Initialize levels.
 		initializeLevels();
-
+		
 		// Initialize game.
 		initializeGame();
 
@@ -59,7 +59,10 @@ public class ChipsChallengeUI extends Application implements Observer {
 		startChipsChallenge();
 	}
 
-	public void initializeGame() {
+	public void initializeGame() {		
+		
+		// Reset nodes.
+		root.getChildren().removeAll(root.getChildren());		
 
 		// Set current level.
 		levelMap = levels[currentLevel];
@@ -131,13 +134,14 @@ public class ChipsChallengeUI extends Application implements Observer {
 			chip.updateImageView(); // Update image view of chip
 			
 			// Check if Chip is at portal and all chips are collected.
-			if (chip.getCoordinates().equals(levelMap.getPortalCoordinates()) && (levelMap.getNumChipItems() == 0)) {
+			if ((chip.getCoordinates().equals(levelMap.getPortalCoordinates())) && (levelMap.getNumChipItems() == 0)) {
 				currentLevel = currentLevel + 1;
 				if (currentLevel >= numLevels) {
 					// Finished last level.
 					System.out.println("Finished game!");
 				} else {
 					// Load next level.
+					System.out.println("Loading next level...");
 					levelMap = levels[currentLevel];
 					initializeGame();
 					startChipsChallenge();											

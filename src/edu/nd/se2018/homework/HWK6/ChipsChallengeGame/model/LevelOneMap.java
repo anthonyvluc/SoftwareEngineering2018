@@ -76,8 +76,7 @@ public class LevelOneMap extends LevelMap {
 		addChipItem(new ChipItem(new Point(24, 5), scale));
 		addChipItem(new ChipItem(new Point(11, 16), scale));
 		addChipItem(new ChipItem(new Point(5, 12), scale));
-		addChipItem(new ChipItem(new Point(0, 24), scale));
-		
+		addChipItem(new ChipItem(new Point(0, 24), scale));		
 		
 	}
 }
