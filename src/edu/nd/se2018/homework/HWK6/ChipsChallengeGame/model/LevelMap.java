@@ -7,8 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.ChipItem;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Door;
-import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Key;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Item;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.LevelBuilder;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Portal;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.view.ChipsChallengeUI;
@@ -30,10 +31,14 @@ public abstract class LevelMap {
 
 	public Tile[][] levelGrid;
 	private List<Door> doors;
-	private List<Key> keys;
+	private List<Item> items;
+	private List<Item> keys;
+	public Collection<Point> itemsSet;
 	public Collection<Point> keysSet;
 	public Collection<Point> waters;
 
+	protected int numChipItems;
+	
 	ObservableList<Node> root;
 	ChipsChallengeUI challengeUI;
 
@@ -43,12 +48,16 @@ public abstract class LevelMap {
 		this.root = root;
 		this.scale = scale;
 		this.challengeUI = chipsChallengeUI;
-
+		
+		// Initialize variables.
 		this.levelGrid = new Tile[dimension][dimension];
 		doors = new ArrayList<Door>();
-		keys = new ArrayList<Key>();
+		keys = new ArrayList<Item>();
 		keysSet = new HashSet<Point>();
+		items = new ArrayList<Item>();
+		itemsSet = new HashSet<Point>();
 		waters = new HashSet<Point>();
+		numChipItems = 0;
 		
 		loadInitialMap(); // Load initial as all floors.
 		levelBuilder = new LevelBuilder(this);
@@ -68,8 +77,14 @@ public abstract class LevelMap {
 						rect.setFill(new ImagePattern(doorImage));
 						root.add(rect);
 						break;
+					case ITEM:
+						ChipItem item = getChipItem(i, j);
+						Image itemImage = item.getImage();
+						rect.setFill(new ImagePattern(itemImage));
+						root.add(rect);
+						break;
 					case KEY:
-						Key key = getKey(i, j);
+						Item key = getKey(i, j);
 						Image keyImage = key.getImage();
 						rect.setFill(new ImagePattern(keyImage));
 						root.add(rect);
@@ -130,14 +145,20 @@ public abstract class LevelMap {
 		return chip;
 	}
 	
+	public int getNumChipItems() {
+		return numChipItems;
+	}
+	
 	public Point getPortalCoordinates() {
 		return portal.getCoordinates();
 	}
 	
 	protected void addDoor(Door d) {
-		doors.add(d);
 		Point c = d.getCoordinates();
+
+		doors.add(d);
 		levelGrid[c.x][c.y] = Tile.DOOR;
+		
 		chip.addObserver(d);
 		d.addObserver(challengeUI);
 	}
@@ -151,24 +172,6 @@ public abstract class LevelMap {
 			}
 		}
 		return door;
-	}
-	
-	protected void addKey(Key k) {
-		keys.add(k);
-		Point c = k.getCoordinates();
-		keysSet.add(c);
-		levelGrid[c.x][c.y] = Tile.KEY;
-	}
-	
-	public Key getKey(int x, int y) {
-		Key key = null;
-		for (Key k: keys) {
-			Point coordinates = k.getCoordinates();
-			if (coordinates.x == x && coordinates.y == y) {
-				key = k;
-			}
-		}
-		return key;
 	}
 
 	public void removeDoor(Door d, ObservableList<Node> root) {
@@ -184,7 +187,26 @@ public abstract class LevelMap {
 		doors.remove(d);
 	}
 	
-	public void removeKey(Key k, ObservableList<Node> root) {
+	/* Key ----------------------------------- */
+	protected void addKey(Item k) {
+		Point c = k.getCoordinates();
+		keys.add(k);
+		keysSet.add(c);
+		levelGrid[c.x][c.y] = Tile.KEY;
+	}
+	
+	public Item getKey(int x, int y) {
+		Item key = null;
+		for (Item k: keys) {
+			Point coordinates = k.getCoordinates();
+			if (coordinates.x == x && coordinates.y == y) {
+				key = k;
+			}
+		}
+		return key;
+	}
+	
+	public void removeKey(Item k, ObservableList<Node> root) {
 		Point c = k.getCoordinates();
 		int index = c.x*dimension + c.y;
 		Node n = root.get(index);
@@ -195,9 +217,48 @@ public abstract class LevelMap {
 		levelGrid[c.x][c.y] = Tile.FLOOR;
 		
 		keys.remove(k);
-		keysSet.remove(k.getCoordinates());
+		keysSet.remove(c);
 	}
 	
+	/* Chip Item ----------------------------- */
+	public void addChipItem(ChipItem c) {
+		Point p = c.getCoordinates();
+
+		items.add(c);
+		itemsSet.add(p);
+		levelGrid[p.x][p.y] = Tile.ITEM;
+
+		numChipItems++;
+	}
+	
+	public ChipItem getChipItem(int x, int y) {
+		ChipItem chipItem = null;
+		for (Item i: items) {
+			Point coordinates = i.getCoordinates();
+			if (coordinates.x == x && coordinates.y == y) {
+				chipItem = (ChipItem)i;
+			}
+		}
+		return chipItem;
+	}
+	
+	public void removeChipItem(ChipItem c, ObservableList<Node> root) {
+		Point p = c.getCoordinates();
+		int index = p.x*dimension + p.y;
+		Node n = root.get(index);
+		
+		Image keyImage = new Image("images/chip/textures/BlankTile.png", scale, scale, true, true);
+		((Rectangle) n).setFill(new ImagePattern(keyImage));
+		
+		levelGrid[p.x][p.y] = Tile.FLOOR;
+		
+		items.remove(c);
+		itemsSet.remove(p);
+
+		numChipItems--;
+	}
+	
+	/* Splash -------------------------------- */
 	public void splash(Point p, ObservableList<Node> root) {
 		Rectangle rect = new Rectangle(p.x*scale, p.y*scale, scale, scale);
 		Image splashImage = new Image("images/chip/textures/waterSplash.png", scale, scale, true, true);

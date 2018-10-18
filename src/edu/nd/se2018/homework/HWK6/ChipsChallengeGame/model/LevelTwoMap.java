@@ -5,8 +5,9 @@ import java.awt.Point;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.BlueDoor;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.BlueKey;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.ChipItem;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Door;
-import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Key;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Item;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Portal;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.RedDoor;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.RedKey;
@@ -73,19 +74,22 @@ public class LevelTwoMap extends LevelMap {
 		levelBuilder.addWall(new Point(17, 22), new Point(17, 23)); //   |
 		
 		/* Doors. ---------------------------------- */
-		Door blueDoor = new BlueDoor(new Point(0, 7), this, scale);
-		addDoor(blueDoor);		
-		Door redDoor = new RedDoor(new Point(0, 8), this, scale);
-		addDoor(redDoor);
+		addDoor(new BlueDoor(new Point(0, 7), this, scale));
+		addDoor(new RedDoor(new Point(0, 8), this, scale));
 		// Guarding blue key.
-		Door redDoorBlueKey = new RedDoor(new Point(17, 24), this, scale);
-		addDoor(redDoorBlueKey);
+		addDoor(new RedDoor(new Point(17, 24), this, scale));
 		
 		/* Keys. ----------------------------------- */
-		Key blueKey = new BlueKey(new Point(22, 23), scale);
-		addKey(blueKey);		
-		Key redKey = new RedKey(new Point(0, 20), scale);
-		addKey(redKey);
-
+		addKey(new BlueKey(new Point(22, 23), scale));
+		addKey(new RedKey(new Point(0, 20), scale));
+		
+		/* Chip Items. ----------------------------- */
+		addChipItem(new ChipItem(new Point(4, 19), scale));
+		addChipItem(new ChipItem(new Point(8, 19), scale));
+		addChipItem(new ChipItem(new Point(24, 24), scale));
+		addChipItem(new ChipItem(new Point(24, 15), scale));
+		addChipItem(new ChipItem(new Point(24, 5), scale));
+		addChipItem(new ChipItem(new Point(12, 22), scale));
+		
 	}
 }

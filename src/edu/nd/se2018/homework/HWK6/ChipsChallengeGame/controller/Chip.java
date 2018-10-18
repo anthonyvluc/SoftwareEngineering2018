@@ -39,18 +39,18 @@ public class Chip extends Observable {
 		return chipState.getCoordinates();
 	}
 	
-	public void addItem(Key key) {
-		chipState.addItem(key);
+	public void addItem(Item item) {
+		chipState.addItem(item);
 	}
 	
-	private Collection<Key> getInventory() {
+	private Collection<Item> getInventory() {
 		return chipState.getInventory();
 	}
 	
 	public boolean hasBlueKey() {
 		boolean bool = false;
-		for (Key k: getInventory()) {
-			if (k instanceof BlueKey) {
+		for (Item i: getInventory()) {
+			if (i instanceof BlueKey) {
 				bool = true;
 			}
 		}
@@ -59,8 +59,8 @@ public class Chip extends Observable {
 	
 	public boolean hasRedKey() {
 		boolean bool = false;
-		for (Key k: getInventory()) {
-			if (k instanceof RedKey) {
+		for (Item i: getInventory()) {
+			if (i instanceof RedKey) {
 				bool = true;
 			}
 		}

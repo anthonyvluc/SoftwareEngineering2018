@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.util.Collection;
 import java.util.HashSet;
 
-import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Key;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Item;
 
 public class ChipState {
 
@@ -13,14 +13,14 @@ public class ChipState {
 	IMovementState slidingState;
 	IMovementState currentState;
 	private LevelMap levelMap;
-	private Collection<Key> inventory;
+	private Collection<Item> inventory;
 
 	public ChipState(Point coordinates, LevelMap levelMap) {
 		this.levelMap = levelMap;
 		initializeStates();
 		setCoordinates(coordinates);
 		
-		this.inventory = new HashSet<Key>();
+		this.inventory = new HashSet<Item>();
 	}
 
 	private void initializeStates(){
@@ -37,11 +37,11 @@ public class ChipState {
 		chipCoordinates = point;
 	}
 	
-	public void addItem(Key key) {
+	public void addItem(Item key) {
 		inventory.add(key);
 	}
 	
-	public Collection<Key> getInventory(){
+	public Collection<Item> getInventory(){
 		return inventory;
 	}
 

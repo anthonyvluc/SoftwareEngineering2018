@@ -1,13 +1,13 @@
 package edu.nd.se2018.homework.HWK6.ChipsChallengeGame.view;
 
 import java.awt.Point;
-import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Chip;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.ChipItem;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Door;
-import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Key;
+import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.controller.Item;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model.LevelMap;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model.LevelOneMap;
 import edu.nd.se2018.homework.HWK6.ChipsChallengeGame.model.LevelTwoMap;
@@ -26,7 +26,7 @@ public class ChipsChallengeUI extends Application implements Observer {
 
 	AnchorPane root;
 	Stage gameStage;
-	Scene gameScene;	
+	Scene gameScene = null;	
 	
 	Chip chip;
 	LevelMap levelMap;	
@@ -76,7 +76,9 @@ public class ChipsChallengeUI extends Application implements Observer {
 		chip.addObserver(this);
 		
 		// Setup.
-		gameScene = new Scene(root, levelSize*cellSize, levelSize*cellSize);
+		if (gameScene == null) {
+			gameScene = new Scene(root, levelSize*cellSize, levelSize*cellSize);			
+		}
 		gameStage.setTitle("Chips Challenge by Hai");
 		gameStage.setScene(gameScene);
 		gameStage.show();
@@ -128,8 +130,8 @@ public class ChipsChallengeUI extends Application implements Observer {
 			Chip chip = (Chip)o;
 			chip.updateImageView(); // Update image view of chip
 			
-			// Check if Chip is at portal.
-			if (chip.getCoordinates().equals(levelMap.getPortalCoordinates())) {
+			// Check if Chip is at portal and all chips are collected.
+			if (chip.getCoordinates().equals(levelMap.getPortalCoordinates()) && (levelMap.getNumChipItems() == 0)) {
 				currentLevel = currentLevel + 1;
 				if (currentLevel >= numLevels) {
 					// Finished last level.
@@ -138,7 +140,7 @@ public class ChipsChallengeUI extends Application implements Observer {
 					// Load next level.
 					levelMap = levels[currentLevel];
 					initializeGame();
-					startChipsChallenge();					
+					startChipsChallenge();											
 				}
 			}
 			
@@ -160,11 +162,21 @@ public class ChipsChallengeUI extends Application implements Observer {
 			if (levelMap.keysSet.contains(chip.getCoordinates())) {
 				System.out.println("picked up keys!!!");
 				Point c = chip.getCoordinates();
-				Key key = levelMap.getKey(c.x, c.y);
+				Item key = levelMap.getKey(c.x, c.y);
 				
 				// Add to inventory and remove from map.
 				chip.addItem(key);
 				levelMap.removeKey(key, root.getChildren());
+			}
+			
+			// Chip picked up chip item.
+			if (levelMap.itemsSet.contains(chip.getCoordinates())) {
+				System.out.println("picked up chip!!!");
+				Point c = chip.getCoordinates();
+				ChipItem chipItem = levelMap.getChipItem(c.x, c.y);
+				
+				// Update level chip item count and remove from map.
+				levelMap.removeChipItem(chipItem, root.getChildren());
 			}
 		}
 		
